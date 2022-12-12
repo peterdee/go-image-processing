@@ -1,0 +1,7 @@
+# Directories
+.idea/
+images/
+
+# Files
+.DS_Store
+.env
