@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"image/draw"
 	"image/jpeg"
 	"log"
 	"os"
 	"time"
+
+	"go-image-processing/processing"
 )
 
 func save(name string, grid [][]color.Color) {
@@ -26,8 +29,8 @@ func save(name string, grid [][]color.Color) {
 	jpeg.Encode(newFile, img.SubImage(img.Rect), nil)
 }
 
-func open() [][]color.Color {
-	file, err := os.Open("images/1.jpeg")
+func open(path string) [][]color.Color {
+	file, err := os.Open(path)
 	if err != nil {
 		log.Fatal("Could not open the file")
 	}
@@ -36,54 +39,37 @@ func open() [][]color.Color {
 	if err != nil {
 		log.Fatal("Could not decode the file")
 	}
+	rect := content.Bounds()
+	rgba := image.NewRGBA(image.Rect(0, 0, rect.Dx(), rect.Dy()))
+	draw.Draw(rgba, rgba.Bounds(), content, rect.Min, draw.Src)
+
 	var grid [][]color.Color
-	size := content.Bounds().Size()
+	size := rgba.Bounds().Size()
 	for i := 0; i < size.X; i += 1 {
 		var y []color.Color
 		for j := 0; j < size.Y; j += 1 {
-			y = append(y, content.At(i, j))
+			y = append(y, rgba.At(i, j))
+			// c := rgba.At(i, j)
+			// cc := content.At(i, j)
+			// fmt.Println(c)
 		}
 		grid = append(grid, y)
 	}
 	return grid
 }
 
-func grayscale(grid [][]color.Color) [][]color.Color {
-	container := make([][]color.Color, len(grid))
-	for x := 0; x < len(container); x += 1 {
-		col := grid[x]
-		resultCol := make([]color.Color, len(col))
-		for y := 0; y < len(resultCol); y += 1 {
-			px := grid[x][y].(color.YCbCr)
-			gray := uint8(float64(px.Cb)/3.0 + float64(px.Cr)/3.0 + float64(px.Y)/3.0)
-			resultCol[y] = color.YCbCr{gray, gray, gray}
-		}
-		container[x] = resultCol
-	}
-	return container
-}
-
-func flipVertical(grid [][]color.Color) [][]color.Color {
-	flipped := make([][]color.Color, len(grid))
-	for x := 0; x < len(flipped); x += 1 {
-		col := grid[x]
-		container := make([]color.Color, len(col))
-		for y := 0; y < len(col)/2; y += 1 {
-			z := len(col) - y - 1
-			container[y], container[z] = col[z], col[y]
-		}
-		flipped[x] = container
-	}
-	return flipped
-}
-
 func main() {
-	img := open()
-	// flipped := flipVertical(img)
 	now := time.Now().UnixMilli()
-	gray := grayscale(img)
+	img := open("images/1.jpeg")
+	// flipped := processing.FlipVertical(img)
+	// gray := processing.Grayscale(img)
+	// binary := processing.Binary(img, 185)
+	inverted := processing.Invert(img)
 	est := time.Now().UnixMilli() - now
 	println(est)
 	name := fmt.Sprintf(`file-%d.jpeg`, time.Now().Unix())
-	save(name, gray)
+	// save("gray-"+name, gray)
+	// save("flipped-"+name, flipped)
+	// save("binary-"+name, binary)
+	save("inverted-"+name, inverted)
 }
