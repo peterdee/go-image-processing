@@ -37,7 +37,7 @@ func open(path string) [][]color.Color {
 	defer file.Close()
 	content, _, err := image.Decode(file)
 	if err != nil {
-		log.Fatal("Could not decode the file")
+		log.Fatal("Could not decode the file", err)
 	}
 	rect := content.Bounds()
 	rgba := image.NewRGBA(image.Rect(0, 0, rect.Dx(), rect.Dy()))
@@ -60,16 +60,16 @@ func open(path string) [][]color.Color {
 
 func main() {
 	now := time.Now().UnixMilli()
-	img := open("images/1.jpeg")
+	img := open("images/5.png")
 	// flipped := processing.FlipVertical(img)
 	// gray := processing.Grayscale(img)
-	// binary := processing.Binary(img, 185)
-	inverted := processing.Invert(img)
+	binary := processing.Binary(img, 185)
+	// inverted := processing.Invert(img)
 	est := time.Now().UnixMilli() - now
 	println(est)
 	name := fmt.Sprintf(`file-%d.jpeg`, time.Now().Unix())
 	// save("gray-"+name, gray)
 	// save("flipped-"+name, flipped)
-	// save("binary-"+name, binary)
-	save("inverted-"+name, inverted)
+	save("binary-"+name, binary)
+	// save("inverted-"+name, inverted)
 }

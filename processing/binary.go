@@ -3,11 +3,13 @@ package processing
 import (
 	"image/color"
 	"math"
+
+	"go-image-processing/constants"
 )
 
 func Binary(grid [][]color.Color, threshold uint) [][]color.Color {
 	if threshold > 255 {
-		threshold = 255
+		threshold = constants.DEFAULT_BINARY_THRESHOLD
 	}
 	for x := 0; x < len(grid); x += 1 {
 		col := grid[x]
