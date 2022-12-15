@@ -60,16 +60,18 @@ func open(path string) [][]color.Color {
 
 func main() {
 	now := time.Now().UnixMilli()
-	img := open("images/5.png")
+	img := open("images/1.jpeg")
 	// flipped := processing.FlipVertical(img)
 	// gray := processing.Grayscale(img)
-	binary := processing.Binary(img, 185)
+	grayLum := processing.GrayscaleLuminocity(img)
+	// binary := processing.Binary(img, 185)
 	// inverted := processing.Invert(img)
 	est := time.Now().UnixMilli() - now
 	println(est)
 	name := fmt.Sprintf(`file-%d.jpeg`, time.Now().Unix())
 	// save("gray-"+name, gray)
 	// save("flipped-"+name, flipped)
-	save("binary-"+name, binary)
+	// save("binary-"+name, binary)
+	save("gray-lum-"+name, grayLum)
 	// save("inverted-"+name, inverted)
 }
