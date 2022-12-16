@@ -3,35 +3,67 @@ package processing
 import (
 	"fmt"
 	"image/color"
-	"math"
 
 	"go-image-processing/constants"
 )
+
+func getPoints(x, y, amount, gridLen, colLen int) (int, int, int, int) {
+	iE, iS, jE, jS := 0, 0, 0, 0
+	if x >= amount {
+		iS = amount * (-1)
+	} else if x < amount {
+		iS = x * (-1)
+	}
+	if y >= amount {
+		jS = amount * (-1)
+	} else if y < amount {
+		jS = y * (-1)
+	}
+	if x > gridLen-amount {
+		iE = amount * (-1)
+	} else if x < amount {
+		iE = x * (-1)
+	}
+	if y > colLen-amount {
+		jE = amount * (-1)
+	} else if y < amount {
+		jE = y * (-1)
+	}
+	return iE, iS, jE, jS
+}
 
 func BoxBlur(grid [][]color.Color, amount uint) [][]color.Color {
 	if amount == 0 {
 		amount = constants.DEFAULT_BLUR_AMOUNT
 	}
-	for x := int(amount); x < len(grid)-int(amount); x += 1 {
+	if int(amount) > (len(grid) / 2) {
+		amount = uint(len(grid) / 2)
+	}
+	amountInt := int(amount)
+	var denominator uint
+	for x := 0; x < len(grid); x += 1 {
 		col := grid[x]
-		for y := int(amount); y < len(col)-int(amount); y += 1 {
-			var tR, tG, tB float64
-			var pA uint32
-			for i := int(amount) * (-1); i < int(amount); i += 1 {
-				for j := int(amount) * (-1); j < int(amount); j += 1 {
-					R, G, B, A := grid[x+i][y+j].RGBA()
-					tR += float64(uint8(R))
-					tG += float64(uint8(G))
-					tB += float64(uint8(B))
-					pA = A
+		for y := 0; y < len(col); y += 1 {
+			var tR, tG, tB uint
+			_, _, _, A := grid[x][y].RGBA()
+			denominator = 0
+
+			iE, iS, jE, jS := getPoints(x, y, amountInt, len(grid), len(col))
+			for i := iS; i <= iE; i += 1 {
+				for j := jS; j <= jE; j += 1 {
+					denominator += 1
+					R, G, B, _ := grid[x+i][y+j].RGBA()
+					tR += uint(uint8(R))
+					tG += uint(uint8(G))
+					tB += uint(uint8(B))
 				}
 			}
+			fmt.Println(tR, tG, tB, denominator)
 
-			blurredR := math.Round(float64(uint8(tR)) / float64(amount*amount))
-			blurredG := math.Round(float64(uint8(tG)) / float64(amount*amount))
-			blurredB := math.Round(float64(uint8(tB)) / float64(amount*amount))
-			fmt.Println(uint8(blurredR), uint8(blurredG), uint8(blurredB), blurredR)
-			col[y] = color.RGBA{uint8(blurredR), uint8(blurredG), uint8(blurredB), uint8(pA)}
+			bR := tR / denominator
+			bG := tG / denominator
+			bB := tB / denominator
+			col[y] = color.RGBA{uint8(bR), uint8(bG), uint8(bB), uint8(A)}
 		}
 		grid[x] = col
 	}

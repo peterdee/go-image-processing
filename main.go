@@ -64,7 +64,7 @@ func main() {
 	// flipped := processing.FlipVertical(img)
 	// gray := processing.Grayscale(img)
 	// grayLum := processing.GrayscaleLuminocity(img)
-	boxBlur := processing.BoxBlur(img, 3)
+	boxBlur := processing.BoxBlur(img, 7)
 	// binary := processing.Binary(img, 185)
 	// inverted := processing.Invert(img)
 	est := time.Now().UnixMilli() - now
