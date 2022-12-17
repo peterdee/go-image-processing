@@ -21,20 +21,22 @@ func BoxBlur(grid [][]color.Color, amount uint) [][]color.Color {
 	if amount == 0 {
 		amount = constants.DEFAULT_BLUR_AMOUNT
 	}
-	if int(amount) > (len(grid) / 2) {
-		amount = uint(len(grid) / 2)
+	gridLen := len(grid)
+	if int(amount) > (gridLen / 2) {
+		amount = uint(gridLen / 2)
 	}
 	amountInt := int(amount)
 	var denominator uint
-	for x := 0; x < len(grid); x += 1 {
+	for x := 0; x < gridLen; x += 1 {
 		col := grid[x]
-		for y := 0; y < len(col); y += 1 {
+		colLen := len(col)
+		for y := 0; y < colLen; y += 1 {
 			var tR, tG, tB uint
 			_, _, _, A := grid[x][y].RGBA()
 			denominator = 0
 
-			iStart, iEnd := getPoints(x, amountInt, len(grid))
-			jStart, jEnd := getPoints(y, amountInt, len(col))
+			iStart, iEnd := getPoints(x, amountInt, gridLen)
+			jStart, jEnd := getPoints(y, amountInt, colLen)
 
 			for i := iStart; i < iEnd; i += 1 {
 				for j := jStart; j < jEnd; j += 1 {
