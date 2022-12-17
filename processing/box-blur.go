@@ -1,35 +1,20 @@
 package processing
 
 import (
-	"fmt"
 	"image/color"
 
 	"go-image-processing/constants"
 )
 
-func getPoints(x, y, amount, gridLen, colLen int) (int, int, int, int) {
-	iE, iS, jE, jS := 0, 0, 0, 0
-	if x >= amount {
-		iS = amount * (-1)
-	} else if x < amount {
-		iS = x * (-1)
+func getPoints(current, amount, total int) (int, int) {
+	start, end := 0, total
+	if current >= amount {
+		start = current - amount
 	}
-	if y >= amount {
-		jS = amount * (-1)
-	} else if y < amount {
-		jS = y * (-1)
+	if current < total-amount {
+		end = current + amount
 	}
-	if x > gridLen-amount {
-		iE = amount * (-1)
-	} else if x < amount {
-		iE = x * (-1)
-	}
-	if y > colLen-amount {
-		jE = amount * (-1)
-	} else if y < amount {
-		jE = y * (-1)
-	}
-	return iE, iS, jE, jS
+	return start, end
 }
 
 func BoxBlur(grid [][]color.Color, amount uint) [][]color.Color {
@@ -48,17 +33,18 @@ func BoxBlur(grid [][]color.Color, amount uint) [][]color.Color {
 			_, _, _, A := grid[x][y].RGBA()
 			denominator = 0
 
-			iE, iS, jE, jS := getPoints(x, y, amountInt, len(grid), len(col))
-			for i := iS; i <= iE; i += 1 {
-				for j := jS; j <= jE; j += 1 {
+			iStart, iEnd := getPoints(x, amountInt, len(grid))
+			jStart, jEnd := getPoints(y, amountInt, len(col))
+
+			for i := iStart; i < iEnd; i += 1 {
+				for j := jStart; j < jEnd; j += 1 {
 					denominator += 1
-					R, G, B, _ := grid[x+i][y+j].RGBA()
+					R, G, B, _ := grid[i][j].RGBA()
 					tR += uint(uint8(R))
 					tG += uint(uint8(G))
 					tB += uint(uint8(B))
 				}
 			}
-			fmt.Println(tR, tG, tB, denominator)
 
 			bR := tR / denominator
 			bG := tG / denominator

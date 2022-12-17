@@ -59,8 +59,8 @@ func open(path string) [][]color.Color {
 }
 
 func main() {
+	img := open("images/3.jpeg")
 	now := time.Now().UnixMilli()
-	img := open("images/2.jpeg")
 	// flipped := processing.FlipVertical(img)
 	// gray := processing.Grayscale(img)
 	// grayLum := processing.GrayscaleLuminocity(img)
