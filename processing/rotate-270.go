@@ -2,7 +2,7 @@ package processing
 
 import "image/color"
 
-func Rotate90(grid [][]color.Color) [][]color.Color {
+func Rotate270(grid [][]color.Color) [][]color.Color {
 	gridLen := len(grid)
 	colLen := len(grid[0])
 
@@ -13,7 +13,7 @@ func Rotate90(grid [][]color.Color) [][]color.Color {
 
 	for x := 0; x < gridLen; x += 1 {
 		for y := 0; y < colLen; y += 1 {
-			rotatedGrid[colLen-y-1][x] = grid[x][y]
+			rotatedGrid[y][gridLen-x-1] = grid[x][y]
 		}
 	}
 	return rotatedGrid
