@@ -6,12 +6,15 @@ import (
 	"image/color"
 	"image/draw"
 	"image/jpeg"
+	"image/png"
 	"log"
 	"os"
 	"time"
 
 	"go-image-processing/processing"
 )
+
+var FORMAT string
 
 func save(name string, grid [][]color.Color) {
 	xLen, yLen := len(grid), len(grid[0])
@@ -26,18 +29,23 @@ func save(name string, grid [][]color.Color) {
 		log.Fatal("Could not save the file")
 	}
 	defer newFile.Close()
-	jpeg.Encode(newFile, img.SubImage(img.Rect), nil)
+	if FORMAT == "png" {
+		png.Encode(newFile, img.SubImage(img.Rect))
+	} else {
+		jpeg.Encode(newFile, img.SubImage(img.Rect), nil)
+	}
 }
 
 func open(path string) [][]color.Color {
 	file, err := os.Open(path)
 	if err != nil {
-		log.Fatal("Could not open the file")
+		log.Fatal("Could not open the file: ", err)
 	}
 	defer file.Close()
-	content, _, err := image.Decode(file)
+	content, f, err := image.Decode(file)
+	FORMAT = f
 	if err != nil {
-		log.Fatal("Could not decode the file", err)
+		log.Fatal("Could not decode the file: ", err)
 	}
 	rect := content.Bounds()
 	rgba := image.NewRGBA(image.Rect(0, 0, rect.Dx(), rect.Dy()))
@@ -59,7 +67,7 @@ func open(path string) [][]color.Color {
 }
 
 func main() {
-	img := open("images/7-x640.jpeg")
+	img := open("images/8.png")
 	now := time.Now().UnixMilli()
 	// flippedV := processing.FlipVertical(img)
 	// gray := processing.Grayscale(img)
@@ -73,7 +81,7 @@ func main() {
 	rotate180 := processing.Rotate180(img)
 	est := time.Now().UnixMilli() - now
 	println(est)
-	name := fmt.Sprintf(`file-%d.jpeg`, time.Now().Unix())
+	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
 	// save("gray-"+name, gray)
 	// save("flippedV-"+name, flippedV)
 	// save("flippedH-"+name, flippedH)
