@@ -4,18 +4,8 @@ import (
 	"image/color"
 
 	"go-image-processing/constants"
+	"go-image-processing/utilities"
 )
-
-func getPoints(current, amount, total int) (int, int) {
-	start, end := 0, total
-	if current >= amount {
-		start = current - amount
-	}
-	if current < total-amount {
-		end = current + amount
-	}
-	return start, end
-}
 
 func BoxBlur(grid [][]color.Color, amount uint) [][]color.Color {
 	if amount == 0 {
@@ -35,8 +25,8 @@ func BoxBlur(grid [][]color.Color, amount uint) [][]color.Color {
 			_, _, _, A := grid[x][y].RGBA()
 			denominator = 0
 
-			iStart, iEnd := getPoints(x, amountInt, gridLen)
-			jStart, jEnd := getPoints(y, amountInt, colLen)
+			iStart, iEnd := utilities.GetPoints(x, amountInt, gridLen)
+			jStart, jEnd := utilities.GetPoints(y, amountInt, colLen)
 
 			for i := iStart; i < iEnd; i += 1 {
 				for j := jStart; j < jEnd; j += 1 {

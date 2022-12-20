@@ -8,6 +8,7 @@ import (
 	"image/jpeg"
 	"image/png"
 	"log"
+	"math"
 	"os"
 	"time"
 
@@ -67,8 +68,8 @@ func open(path string) [][]color.Color {
 }
 
 func main() {
-	img := open("images/8.png")
-	now := time.Now().UnixMilli()
+	img := open("images/9.jpeg")
+	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
 	// gray := processing.Grayscale(img)
 	// grayLum := processing.GrayscaleLuminocity(img)
@@ -78,15 +79,17 @@ func main() {
 	// flippedH := processing.FlipHorizontal(img)
 	// rotate90 := processing.Rotate90(img)
 	// rotate270 := processing.Rotate270(img)
-	rotate180 := processing.Rotate180(img)
-	est := time.Now().UnixMilli() - now
+	// rotate180 := processing.Rotate180(img)
+	sobel := processing.SobelFilter(img)
+	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	println(est)
 	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
 	// save("gray-"+name, gray)
 	// save("flippedV-"+name, flippedV)
 	// save("flippedH-"+name, flippedH)
 	// save("rotate90-"+name, rotate90)
-	save("rotate180-"+name, rotate180)
+	save("sobel-"+name, sobel)
+	// save("rotate180-"+name, rotate180)
 	// save("rotate270-"+name, rotate270)
 	// save("binary-"+name, binary)
 	// save("gray-lum-"+name, grayLum)
