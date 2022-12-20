@@ -68,7 +68,7 @@ func open(path string) [][]color.Color {
 }
 
 func main() {
-	img := open("images/9.jpeg")
+	img := open("images/6-lenna-x512.png")
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
 	// gray := processing.Grayscale(img)
@@ -80,7 +80,8 @@ func main() {
 	// rotate90 := processing.Rotate90(img)
 	// rotate270 := processing.Rotate270(img)
 	// rotate180 := processing.Rotate180(img)
-	sobel := processing.SobelFilter(img)
+	// sobel := processing.SobelFilter(img)
+	emboss := processing.EmbossFilter(img)
 	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	println(est)
 	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
@@ -88,7 +89,8 @@ func main() {
 	// save("flippedV-"+name, flippedV)
 	// save("flippedH-"+name, flippedH)
 	// save("rotate90-"+name, rotate90)
-	save("sobel-"+name, sobel)
+	// save("sobel-"+name, sobel)
+	save("laplas-"+name, emboss)
 	// save("rotate180-"+name, rotate180)
 	// save("rotate270-"+name, rotate270)
 	// save("binary-"+name, binary)
