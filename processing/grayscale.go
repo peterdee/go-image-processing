@@ -2,16 +2,16 @@ package processing
 
 import (
 	"image/color"
-	"math"
+
+	"go-image-processing/utilities"
 )
 
 func Grayscale(grid [][]color.Color) [][]color.Color {
 	for x := 0; x < len(grid); x += 1 {
 		col := grid[x]
 		for y := 0; y < len(col); y += 1 {
-			R, G, B, A := grid[x][y].RGBA()
-			gray := math.Round((float64(uint8(R)) + float64(uint8(G)) + float64(uint8(B))) / 3.0)
-			col[y] = color.RGBA{uint8(gray), uint8(gray), uint8(gray), uint8(A)}
+			grayColor, alpla := utilities.Gray(grid[x][y])
+			col[y] = color.RGBA{grayColor, grayColor, grayColor, alpla}
 		}
 		grid[x] = col
 	}

@@ -1,26 +1,26 @@
 package processing
 
 import (
+	"go-image-processing/utilities"
 	"image/color"
 	"math"
 )
 
-var horizontal = [3][3]int{
-	{0, 2, 0},
-	{0, 0, 0},
-	{0, -2, 0},
-}
-var vertical = [3][3]int{
+var EMBOSS_HORIZONTAL = [3][3]int{
 	{0, 0, 0},
 	{2, 0, -2},
 	{0, 0, 0},
 }
 
-func EmbossFilter(grid [][]color.Color) [][]color.Color {
-	gray := Grayscale(grid)
+var EMBOSS_VERTICAL = [3][3]int{
+	{0, 2, 0},
+	{0, 0, 0},
+	{0, -2, 0},
+}
 
-	gridLen := len(gray)
-	colLen := len(gray[0])
+func EmbossFilter(grid [][]color.Color) [][]color.Color {
+	gridLen := len(grid)
+	colLen := len(grid[0])
 	for x := 3; x < gridLen-3; x += 1 {
 		for y := 3; y < colLen-3; y += 1 {
 			gradientX := 0
@@ -39,9 +39,9 @@ func EmbossFilter(grid [][]color.Color) [][]color.Color {
 			// fmt.Println(iStart, iEnd, jStart, jEnd)
 			for i := 0; i < 3; i += 1 {
 				for j := 0; j < 3; j += 1 {
-					r, _, _, _ := gray[x+i][j+y].RGBA()
-					gradientX += int(uint8(r)) * vertical[i][j]
-					gradientY += int(uint8(r)) * horizontal[i][j]
+					grayColor, _ := utilities.Gray(grid[x+i][y+j])
+					gradientX += int(grayColor) * EMBOSS_HORIZONTAL[i][j]
+					gradientY += int(grayColor) * EMBOSS_VERTICAL[i][j]
 				}
 			}
 
@@ -49,8 +49,8 @@ func EmbossFilter(grid [][]color.Color) [][]color.Color {
 				float64((gradientX*gradientX)+(gradientY*gradientY)),
 			)))
 			pixelColor := color.RGBA{colorCode, colorCode, colorCode, 255}
-			gray[x][y] = pixelColor
+			grid[x][y] = pixelColor
 		}
 	}
-	return gray
+	return grid
 }
