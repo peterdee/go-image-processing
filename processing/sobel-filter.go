@@ -1,10 +1,10 @@
 package processing
 
 import (
-	"fmt"
-	"go-image-processing/utilities"
 	"image/color"
 	"math"
+
+	"go-image-processing/utilities"
 )
 
 var SOBEL_HORIZONTAL = [3][3]int{
@@ -19,16 +19,11 @@ var SOBEL_VERTICAL = [3][3]int{
 	{-1, -2, -1},
 }
 
-func getPoints(axisValue, axisLength int) (int, int) {
-	start := 0
-	end := axisValue + 2
-	if axisValue >= 1 {
-		start = axisValue - 1
+func getGradientPoint(axisValue, shift, axisLength int) int {
+	if axisValue+shift >= axisLength {
+		return axisLength - axisValue - 1
 	}
-	if end > axisLength {
-		end = axisLength
-	}
-	return start, end
+	return shift
 }
 
 func SobelFilter(grid [][]color.Color) [][]color.Color {
@@ -38,27 +33,18 @@ func SobelFilter(grid [][]color.Color) [][]color.Color {
 		for y := 0; y < colLen; y += 1 {
 			gradientX := 0
 			gradientY := 0
-
-			iS, iE := getPoints(x, gridLen)
-			jS, jE := getPoints(y, colLen)
-			fmt.Println(iS, iE, jS, jE)
-			mi, mj := 0, 0
-			for i := iS; i < iE; i += 1 {
-				mj = 0
-				for j := jS; j < jE; j += 1 {
-					grayColor, _ := utilities.Gray(grid[i][j])
-					gradientX += int(grayColor) * SOBEL_HORIZONTAL[mi][mj]
-					gradientY += int(grayColor) * SOBEL_VERTICAL[mi][mj]
-					mj += 1
+			for i := 0; i < 3; i += 1 {
+				for j := 0; j < 3; j += 1 {
+					k, l := getGradientPoint(x, i, gridLen), getGradientPoint(y, j, colLen)
+					grayColor, _ := utilities.Gray(grid[x+k][y+l])
+					gradientX += int(grayColor) * SOBEL_HORIZONTAL[i][j]
+					gradientY += int(grayColor) * SOBEL_VERTICAL[i][j]
 				}
-				mi += 1
 			}
-
 			colorCode := 255 - uint8(int(math.Sqrt(
 				float64((gradientX*gradientX)+(gradientY*gradientY)),
 			)))
-			pixelColor := color.RGBA{colorCode, colorCode, colorCode, 255}
-			grid[x][y] = pixelColor
+			grid[x][y] = color.RGBA{colorCode, colorCode, colorCode, 255}
 		}
 	}
 	return grid
