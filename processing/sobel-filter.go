@@ -19,13 +19,6 @@ var SOBEL_VERTICAL = [3][3]int{
 	{-1, -2, -1},
 }
 
-func getGradientPoint(axisValue, shift, axisLength int) int {
-	if axisValue+shift >= axisLength {
-		return axisLength - axisValue - 1
-	}
-	return shift
-}
-
 func SobelFilter(grid [][]color.Color) [][]color.Color {
 	gridLen := len(grid)
 	colLen := len(grid[0])
@@ -35,7 +28,8 @@ func SobelFilter(grid [][]color.Color) [][]color.Color {
 			gradientY := 0
 			for i := 0; i < 3; i += 1 {
 				for j := 0; j < 3; j += 1 {
-					k, l := getGradientPoint(x, i, gridLen), getGradientPoint(y, j, colLen)
+					k := utilities.GetGradientPoint(x, i, gridLen)
+					l := utilities.GetGradientPoint(y, j, colLen)
 					grayColor, _ := utilities.Gray(grid[x+k][y+l])
 					gradientX += int(grayColor) * SOBEL_HORIZONTAL[i][j]
 					gradientY += int(grayColor) * SOBEL_VERTICAL[i][j]
