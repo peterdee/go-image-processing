@@ -68,7 +68,7 @@ func open(path string) [][]color.Color {
 }
 
 func main() {
-	img := open("images/7.jpeg")
+	img := open("images/1.png")
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
 	// gray := processing.Grayscale(img)
@@ -82,7 +82,8 @@ func main() {
 	// rotate180 := processing.Rotate180(img)
 	// sobel := processing.SobelFilter(img)
 	// emboss := processing.EmbossFilter(img)
-	kuwahara := processing.KuwaharaFilter(img)
+	// kuwahara := processing.KuwaharaFilter(img)
+	laplasian := processing.LaplasianFilter(img)
 	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	println(est)
 	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
@@ -92,7 +93,8 @@ func main() {
 	// save("rotate90-"+name, rotate90)
 	// save("sobel-"+name, sobel)
 	// save("emboss-"+name, emboss)
-	save("kuwahara-"+name, kuwahara)
+	// save("kuwahara-"+name, kuwahara)
+	save("laplasian-"+name, laplasian)
 	// save("rotate180-"+name, rotate180)
 	// save("rotate270-"+name, rotate270)
 	// save("binary-"+name, binary)
