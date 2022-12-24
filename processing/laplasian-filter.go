@@ -24,7 +24,7 @@ func LaplasianFilter(grid [][]color.Color) [][]color.Color {
 					k := utilities.GetGradientPoint(x, i, gridLen)
 					l := utilities.GetGradientPoint(y, j, colLen)
 					grayColor, _ := utilities.Gray(grid[x+k][y+l])
-					gradientX += int(grayColor) * SOBEL_HORIZONTAL[i][j]
+					gradientX += int(grayColor) * LAPLASIAN_KERNEL[i][j]
 				}
 			}
 			colorCode := 255 - uint8(int(math.Sqrt(

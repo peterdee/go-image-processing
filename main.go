@@ -68,7 +68,7 @@ func open(path string) [][]color.Color {
 }
 
 func main() {
-	img := open("images/1.png")
+	img := open("images/4.jpg")
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
 	// gray := processing.Grayscale(img)
