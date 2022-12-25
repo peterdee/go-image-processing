@@ -8,9 +8,9 @@ import (
 )
 
 var LAPLASIAN_KERNEL = [3][3]int{
-	{-1, -1, -1},
-	{-1, 8, -1},
-	{-1, -1, -1},
+	{0, -1, 0},
+	{-1, 4, -1},
+	{0, -1, 0},
 }
 
 func LaplasianFilter(grid [][]color.Color) [][]color.Color {
