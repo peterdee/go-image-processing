@@ -12,7 +12,7 @@ import (
 var FORMAT string
 
 func main() {
-	img, f := utilities.OpenFile("images/4.jpg")
+	img, f := utilities.OpenFile("images/8.png")
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
