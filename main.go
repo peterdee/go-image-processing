@@ -12,7 +12,7 @@ import (
 var FORMAT string
 
 func main() {
-	img, f := utilities.OpenFile("images/8.png")
+	img, f := utilities.OpenFile("images/6.png")
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
@@ -37,7 +37,7 @@ func main() {
 	// save("flippedH-"+name, flippedH)
 	// save("rotate90-"+name, rotate90)
 	// save("sobel-"+name, sobel)
-	// save("emboss-"+name, emboss)
+	// utilities.SaveFile("emboss-"+name, FORMAT, emboss)
 	utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
 	// utilities.SaveFile("laplasian-"+name, FORMAT, laplasian)
 	// save("rotate180-"+name, rotate180)

@@ -11,8 +11,6 @@ type Point struct {
 	x, y int
 }
 
-type GridPartial3x3 [3][3]Point
-
 type GridPartial5x5 [5][5]Point
 
 func createGridPartials5x5(x, y int) [4]GridPartial5x5 {
@@ -45,30 +43,6 @@ func createGridPartials5x5(x, y int) [4]GridPartial5x5 {
 		{{x, y + 4}, {x + 1, y + 4}, {x + 2, y + 4}, {x + 3, y + 4}, {x + 4, y + 4}},
 	}
 	return [4]GridPartial5x5{tl, tr, bl, br}
-}
-
-func createGridPartials(x, y int) [4]GridPartial3x3 {
-	tl := GridPartial3x3{
-		{{x - 2, y - 2}, {x - 1, y - 2}, {x, y - 2}},
-		{{x - 2, y - 1}, {x - 1, y - 1}, {x, y - 1}},
-		{{x - 2, y}, {x - 1, y}, {x, y}},
-	}
-	tr := GridPartial3x3{
-		{{x, y - 2}, {x + 1, y - 2}, {x + 2, y - 2}},
-		{{x, y - 1}, {x + 1, y - 1}, {x + 2, y - 1}},
-		{{x, y}, {x + 1, y}, {x + 2, y}},
-	}
-	bl := GridPartial3x3{
-		{{x - 2, y}, {x - 1, y}, {x, y}},
-		{{x - 2, y - 1}, {x - 1, y - 1}, {x, y - 1}},
-		{{x - 2, y - 2}, {x - 1, y - 2}, {x, y - 2}},
-	}
-	br := GridPartial3x3{
-		{{x, y}, {x + 1, y}, {x + 2, y}},
-		{{x, y + 1}, {x + 1, y + 1}, {x + 2, y + 1}},
-		{{x, y + 2}, {x + 1, y + 2}, {x + 2, y + 2}},
-	}
-	return [4]GridPartial3x3{tl, tr, bl, br}
 }
 
 func KuwaharaFilter(grid [][]color.Color) [][]color.Color {
