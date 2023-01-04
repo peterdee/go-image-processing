@@ -2,36 +2,40 @@ package processing
 
 import (
 	"image/color"
+	"math"
 
 	"go-image-processing/constants"
 	"go-image-processing/utilities"
 )
 
-func BoxBlur(grid [][]color.Color, amount uint) [][]color.Color {
+func BoxBlur(source [][]color.Color, amount uint) [][]color.Color {
 	if amount == 0 {
 		amount = constants.DEFAULT_BLUR_AMOUNT
 	}
-	gridLen := len(grid)
-	if int(amount) > (gridLen / 2) {
-		amount = uint(gridLen / 2)
+	width, height := len(source), len(source[0])
+
+	// auto-adjust amount based on the source size
+	min := math.Min(float64(width), float64(height))
+	if amount > (uint(min) / 2) {
+		amount = uint(min / 2)
 	}
+
 	amountInt := int(amount)
 	var denominator uint
-	for x := 0; x < gridLen; x += 1 {
-		col := grid[x]
-		colLen := len(col)
-		for y := 0; y < colLen; y += 1 {
+	destination := utilities.CreateGrid(width, height)
+	for x := 0; x < width; x += 1 {
+		for y := 0; y < height; y += 1 {
 			var tR, tG, tB uint
-			_, _, _, A := grid[x][y].RGBA()
+			_, _, _, A := source[x][y].RGBA()
 			denominator = 0
 
-			iStart, iEnd := utilities.GetPoints(x, amountInt, gridLen)
-			jStart, jEnd := utilities.GetPoints(y, amountInt, colLen)
+			iStart, iEnd := utilities.GetPoints(x, amountInt, width)
+			jStart, jEnd := utilities.GetPoints(y, amountInt, height)
 
 			for i := iStart; i < iEnd; i += 1 {
 				for j := jStart; j < jEnd; j += 1 {
 					denominator += 1
-					R, G, B, _ := grid[i][j].RGBA()
+					R, G, B, _ := source[i][j].RGBA()
 					tR += uint(uint8(R))
 					tG += uint(uint8(G))
 					tB += uint(uint8(B))
@@ -41,9 +45,8 @@ func BoxBlur(grid [][]color.Color, amount uint) [][]color.Color {
 			bR := tR / denominator
 			bG := tG / denominator
 			bB := tB / denominator
-			col[y] = color.RGBA{uint8(bR), uint8(bG), uint8(bB), uint8(A)}
+			destination[x][y] = color.RGBA{uint8(bR), uint8(bG), uint8(bB), uint8(A)}
 		}
-		grid[x] = col
 	}
-	return grid
+	return destination
 }

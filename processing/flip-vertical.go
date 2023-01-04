@@ -1,17 +1,19 @@
 package processing
 
-import "image/color"
+import (
+	"image/color"
 
-func FlipVertical(grid [][]color.Color) [][]color.Color {
-	gridLen := len(grid)
-	colLen := len(grid[0])
-	for x := 0; x < gridLen; x += 1 {
-		col := grid[x]
-		for y := 0; y < colLen/2; y += 1 {
-			z := colLen - y - 1
-			col[y], col[z] = col[z], col[y]
+	"go-image-processing/utilities"
+)
+
+func FlipVertical(source [][]color.Color) [][]color.Color {
+	width, height := len(source), len(source[0])
+	destination := utilities.CreateGrid(width, height)
+	for x := 0; x < width; x += 1 {
+		for y := 0; y < height/2; y += 1 {
+			z := height - y - 1
+			destination[x][y], destination[x][z] = source[x][z], source[x][y]
 		}
-		grid[x] = col
 	}
-	return grid
+	return destination
 }

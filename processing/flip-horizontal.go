@@ -1,15 +1,19 @@
 package processing
 
-import "image/color"
+import (
+	"image/color"
 
-func FlipHorizontal(grid [][]color.Color) [][]color.Color {
-	gridLen := len(grid)
-	colLen := len(grid[0])
-	for x := 0; x < gridLen/2; x += 1 {
-		for y := 0; y < colLen; y += 1 {
-			z := gridLen - x - 1
-			grid[x][y], grid[z][y] = grid[z][y], grid[x][y]
+	"go-image-processing/utilities"
+)
+
+func FlipHorizontal(source [][]color.Color) [][]color.Color {
+	width, height := len(source), len(source[0])
+	destination := utilities.CreateGrid(width, height)
+	for x := 0; x < width/2; x += 1 {
+		for y := 0; y < height; y += 1 {
+			z := width - x - 1
+			destination[x][y], destination[z][y] = source[z][y], source[x][y]
 		}
 	}
-	return grid
+	return destination
 }

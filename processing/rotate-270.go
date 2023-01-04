@@ -1,20 +1,18 @@
 package processing
 
-import "image/color"
+import (
+	"image/color"
 
-func Rotate270(grid [][]color.Color) [][]color.Color {
-	gridLen := len(grid)
-	colLen := len(grid[0])
+	"go-image-processing/utilities"
+)
 
-	rotatedGrid := make([][]color.Color, colLen)
-	for ri := range rotatedGrid {
-		rotatedGrid[ri] = make([]color.Color, gridLen)
-	}
-
-	for x := 0; x < gridLen; x += 1 {
-		for y := 0; y < colLen; y += 1 {
-			rotatedGrid[y][gridLen-x-1] = grid[x][y]
+func Rotate270(source [][]color.Color) [][]color.Color {
+	width, height := len(source), len(source[0])
+	destination := utilities.CreateGrid(height, width)
+	for x := 0; x < width; x += 1 {
+		for y := 0; y < height; y += 1 {
+			destination[y][width-x-1] = source[x][y]
 		}
 	}
-	return rotatedGrid
+	return destination
 }
