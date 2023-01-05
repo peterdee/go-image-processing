@@ -12,7 +12,7 @@ import (
 var FORMAT string
 
 func main() {
-	img, f := utilities.OpenFile("images/3.jpg")
+	img, f := utilities.OpenFile("images/2.png")
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
@@ -29,7 +29,9 @@ func main() {
 	// emboss := processing.EmbossFilter(img)
 	// gamma := processing.GammaCorrection(img, 0)
 	// bright := processing.Brightness(img, -2225)
-	contrast := processing.Contrast(img, 225)
+	// contrast := processing.Contrast(img, 225)
+	// solarize := processing.Solarize(img, 168)
+	sepia := processing.Sepia(img)
 	// kuwahara := processing.KuwaharaFilter(img)
 	// laplasian := processing.LaplasianFilter(img)
 	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
@@ -42,8 +44,10 @@ func main() {
 	// utilities.SaveFile("sobel-"+name, FORMAT, sobel)
 	// utilities.SaveFile("emboss-"+name, FORMAT, emboss)
 	// utilities.SaveFile("gamma-"+name, FORMAT, gamma)
-	// utilities.SaveFile("gamma-"+name, FORMAT, bright)
-	utilities.SaveFile("gamma-"+name, FORMAT, contrast)
+	// utilities.SaveFile("bright-"+name, FORMAT, bright)
+	// utilities.SaveFile("contrast-"+name, FORMAT, contrast)
+	// utilities.SaveFile("solar-"+name, FORMAT, solarize)
+	utilities.SaveFile("sepia-"+name, FORMAT, sepia)
 	// utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
 	// utilities.SaveFile("laplasian-"+name, FORMAT, laplasian)
 	// save("rotate180-"+name, rotate180)
