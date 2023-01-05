@@ -8,6 +8,9 @@ import (
 )
 
 func GammaCorrection(source [][]color.Color, amount float64) [][]color.Color {
+	if amount > 3.99 {
+		amount = 3.99
+	}
 	width, height := len(source), len(source[0])
 	destination := utilities.CreateGrid(width, height)
 	power := 1 / amount
