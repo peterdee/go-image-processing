@@ -12,7 +12,7 @@ import (
 var FORMAT string
 
 func main() {
-	img, f := utilities.OpenFile("images/2.jpeg")
+	img, f := utilities.OpenFile("images/3.jpg")
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
@@ -26,7 +26,8 @@ func main() {
 	// rotate270 := processing.Rotate270(img)
 	// rotate180 := processing.Rotate180(img)
 	// sobel := processing.SobelFilter(img)
-	emboss := processing.EmbossFilter(img)
+	// emboss := processing.EmbossFilter(img)
+	gamma := processing.GammaCorrection(img, 0)
 	// kuwahara := processing.KuwaharaFilter(img)
 	// laplasian := processing.LaplasianFilter(img)
 	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
@@ -37,7 +38,8 @@ func main() {
 	// utilities.SaveFile("flippedH-"+name, FORMAT, flippedH)
 	// save("rotate90-"+name, rotate90)
 	// utilities.SaveFile("sobel-"+name, FORMAT, sobel)
-	utilities.SaveFile("emboss-"+name, FORMAT, emboss)
+	// utilities.SaveFile("emboss-"+name, FORMAT, emboss)
+	utilities.SaveFile("gamma-"+name, FORMAT, gamma)
 	// utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
 	// utilities.SaveFile("laplasian-"+name, FORMAT, laplasian)
 	// save("rotate180-"+name, rotate180)
