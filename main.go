@@ -12,7 +12,7 @@ import (
 var FORMAT string
 
 func main() {
-	img, f := utilities.OpenFile("images/2.png")
+	img, f := utilities.OpenFile("images/3.jpg")
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
@@ -31,7 +31,8 @@ func main() {
 	// bright := processing.Brightness(img, -2225)
 	// contrast := processing.Contrast(img, 225)
 	// solarize := processing.Solarize(img, 168)
-	sepia := processing.Sepia(img)
+	// sepia := processing.Sepia(img)
+	eight := processing.EightColors(img)
 	// kuwahara := processing.KuwaharaFilter(img)
 	// laplasian := processing.LaplasianFilter(img)
 	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
@@ -47,7 +48,8 @@ func main() {
 	// utilities.SaveFile("bright-"+name, FORMAT, bright)
 	// utilities.SaveFile("contrast-"+name, FORMAT, contrast)
 	// utilities.SaveFile("solar-"+name, FORMAT, solarize)
-	utilities.SaveFile("sepia-"+name, FORMAT, sepia)
+	// utilities.SaveFile("sepia-"+name, FORMAT, sepia)
+	utilities.SaveFile("8colors-"+name, FORMAT, eight)
 	// utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
 	// utilities.SaveFile("laplasian-"+name, FORMAT, laplasian)
 	// save("rotate180-"+name, rotate180)
