@@ -24,9 +24,9 @@ func HueRotate(source [][]color.Color, angle int) [][]color.Color {
 	for x := 0; x < width; x += 1 {
 		for y := 0; y < height; y += 1 {
 			r, g, b, alpha := utilities.RGBA(source[x][y])
-			rr := float64(r)*matrix[0] + float64(g)*matrix[1] + float64(b)*matrix[2]
-			rg := float64(r)*matrix[2] + float64(g)*matrix[0] + float64(b)*matrix[1]
-			rb := float64(r)*matrix[1] + float64(g)*matrix[2] + float64(b)*matrix[0]
+			rr := utilities.MaxMin(float64(r)*matrix[0]+float64(g)*matrix[1]+float64(b)*matrix[2], 255, 0)
+			rg := utilities.MaxMin(float64(r)*matrix[2]+float64(g)*matrix[0]+float64(b)*matrix[1], 255, 0)
+			rb := utilities.MaxMin(float64(r)*matrix[1]+float64(g)*matrix[2]+float64(b)*matrix[0], 255, 0)
 			destination[x][y] = color.RGBA{
 				uint8(rr),
 				uint8(rg),

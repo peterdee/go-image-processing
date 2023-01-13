@@ -12,7 +12,7 @@ import (
 var FORMAT string
 
 func main() {
-	img, f := utilities.OpenFile("images/5.png")
+	img, f := utilities.OpenFile("images/4.jpg")
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
@@ -34,7 +34,7 @@ func main() {
 	// sepia := processing.Sepia(img)
 	// eight := processing.EightColors(img)
 	// rotateN := processing.RotateAngle(img, 52)
-	hue := processing.HueRotate(img, 720)
+	hue := processing.HueRotate(img, 52)
 	// kuwahara := processing.KuwaharaFilter(img)
 	// laplasian := processing.LaplasianFilter(img)
 	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
