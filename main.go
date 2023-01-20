@@ -12,7 +12,7 @@ import (
 var FORMAT string
 
 func main() {
-	img, f := utilities.OpenFile("images/7.jpeg")
+	img, f := utilities.OpenFile("images/9.jpeg")
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
@@ -35,7 +35,8 @@ func main() {
 	// eight := processing.EightColors(img)
 	// rotateN := processing.RotateAngle(img, 52)
 	// hue := processing.HueRotate(img, 52)
-	kuwahara := processing.KuwaharaFilter(img, 25)
+	// kuwahara := processing.KuwaharaFilter(img, 25)
+	gauss := processing.GaussianBlur(img, 25)
 	// laplasian := processing.LaplasianFilter(img)
 	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	println(est)
@@ -54,7 +55,8 @@ func main() {
 	// utilities.SaveFile("8colors-"+name, FORMAT, eight)
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
 	// utilities.SaveFile("hue-"+name, FORMAT, hue)
-	utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
+	// utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
+	utilities.SaveFile("gauss-"+name, FORMAT, gauss)
 	// utilities.SaveFile("laplasian-"+name, FORMAT, laplasian)
 	// save("rotate180-"+name, rotate180)
 	// save("rotate270-"+name, rotate270)
