@@ -10,14 +10,15 @@ func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 	width, height := len(source), len(source[0])
 
 	radiusInt := int(radius)
+	halfRadius := radiusInt / 2
 
-	ApetureMinX := [4]int{-radiusInt / 2, 0, -radiusInt / 2, 0}
-	ApetureMaxX := [4]int{0, radiusInt / 2, 0, radiusInt / 2}
-	ApetureMinY := [4]int{-radiusInt / 2, -radiusInt / 2, 0, 0}
-	ApetureMaxY := [4]int{0, 0, radiusInt / 2, radiusInt / 2}
+	ApetureMinX := [4]int{-halfRadius, 0, -halfRadius, 0}
+	ApetureMaxX := [4]int{0, halfRadius, 0, halfRadius}
+	ApetureMinY := [4]int{-halfRadius, -halfRadius, 0, 0}
+	ApetureMaxY := [4]int{0, 0, halfRadius, halfRadius}
 
-	for x := radiusInt; x < width-radiusInt; x += 1 {
-		for y := radiusInt; y < height-radiusInt; y += 1 {
+	for x := halfRadius; x < width-halfRadius; x += 1 {
+		for y := halfRadius; y < height-halfRadius; y += 1 {
 
 			NumPixels := [4]int{0, 0, 0, 0}
 			RValues := [4]int{0, 0, 0, 0}
@@ -31,9 +32,9 @@ func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 			MinBValue := [4]int{255, 255, 255, 255}
 
 			for i := 0; i < 4; i += 1 {
-				for x2 := ApetureMinX[i]; x2 < ApetureMaxX[i]; x2 += 1 {
+				for x2 := ApetureMinX[i]; x2 <= ApetureMaxX[i]; x2 += 1 {
 					TempX := x + x2
-					for y2 := ApetureMinY[i]; y2 < ApetureMaxY[i]; y2 += 1 {
+					for y2 := ApetureMinY[i]; y2 <= ApetureMaxY[i]; y2 += 1 {
 						TempY := y + y2
 
 						r, g, b, _ := utilities.RGBA(source[TempX][TempY])
@@ -48,9 +49,9 @@ func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 						}
 
 						if int(g) > MaxGValue[i] {
-							MaxRValue[i] = int(r)
+							MaxGValue[i] = int(g)
 						} else if int(g) < MinGValue[i] {
-							MinRValue[i] = int(g)
+							MinGValue[i] = int(g)
 						}
 
 						if int(b) > MaxBValue[i] {
