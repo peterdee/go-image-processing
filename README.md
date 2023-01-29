@@ -10,6 +10,7 @@ This module is a base for https://github.com/julyskies/brille
 2. Kuwahara filter (static / dynamic)
 3. Sharpening filter (static)
 4. Image rotation for any given angle
+5. Bilateral filter (static / dynamic)
 
 ### Added filters
 
@@ -26,7 +27,7 @@ This module is a base for https://github.com/julyskies/brille
 - Grayscale (luminocity)
 - Hue rotate
 - Inversion
-- Kuwahara filter (edge detection, static) - **in progress**
+- Kuwahara filter (edge detection, dynamic) - **in progress**
 - Laplasian filter (edge detection, static)
 - Rotate image (90 degrees)
 - Rotate image (180 degrees)

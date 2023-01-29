@@ -8,6 +8,7 @@ import (
 
 func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 	width, height := len(source), len(source[0])
+	destination := utilities.CreateGrid(width, height)
 
 	radiusInt := int(radius)
 	halfRadius := radiusInt / 2
@@ -17,8 +18,15 @@ func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 	ApetureMinY := [4]int{-halfRadius, -halfRadius, 0, 0}
 	ApetureMaxY := [4]int{0, 0, halfRadius, halfRadius}
 
-	for x := halfRadius; x < width-halfRadius; x += 1 {
-		for y := halfRadius; y < height-halfRadius; y += 1 {
+	for x := 0; x < width; x += 1 {
+		for y := 0; y < height; y += 1 {
+
+			// TODO: fix
+			if x < halfRadius || x >= width-halfRadius ||
+				y < halfRadius || y >= height-halfRadius {
+				destination[x][y] = source[x][y]
+				continue
+			}
 
 			NumPixels := [4]int{0, 0, 0, 0}
 			RValues := [4]int{0, 0, 0, 0}
@@ -77,8 +85,8 @@ func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 			cR := uint8(RValues[j] / NumPixels[j])
 			cG := uint8(GValues[j] / NumPixels[j])
 			cB := uint8(BValues[j] / NumPixels[j])
-			source[x][y] = color.RGBA{cR, cG, cB, 255}
+			destination[x][y] = color.RGBA{cR, cG, cB, 255}
 		}
 	}
-	return source
+	return destination
 }

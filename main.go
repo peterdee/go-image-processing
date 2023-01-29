@@ -35,7 +35,7 @@ func main() {
 	// eight := processing.EightColors(img)
 	// rotateN := processing.RotateAngle(img, 52)
 	// hue := processing.HueRotate(img, 52)
-	kuwahara := processing.KuwaharaFilter(img, 12)
+	kuwahara := processing.KuwaharaFilter(img, 7)
 	// gauss := processing.GaussianBlur(img, 25)
 	// laplasian := processing.LaplasianFilter(img)
 	// sharpen := processing.SharpenFilter(img)

@@ -52,6 +52,12 @@ func SaveFile(name, format string, grid [][]color.Color) {
 	if format == "png" {
 		png.Encode(newFile, img.SubImage(img.Rect))
 	} else {
-		jpeg.Encode(newFile, img.SubImage(img.Rect), nil)
+		jpeg.Encode(
+			newFile,
+			img.SubImage(img.Rect),
+			&jpeg.Options{
+				Quality: 100,
+			},
+		)
 	}
 }
