@@ -7,7 +7,9 @@ import (
 	"image/jpeg"
 	"image/png"
 	"log"
+	"math"
 	"os"
+	"time"
 )
 
 func OpenFile(path string) ([][]color.Color, string) {
@@ -20,6 +22,8 @@ func OpenFile(path string) ([][]color.Color, string) {
 	if err != nil {
 		log.Fatal("Could not decode the file: ", err)
 	}
+
+	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	rect := content.Bounds()
 	rgba := image.NewRGBA(image.Rect(0, 0, rect.Dx(), rect.Dy()))
 	draw.Draw(rgba, rgba.Bounds(), content, rect.Min, draw.Src)
@@ -33,6 +37,8 @@ func OpenFile(path string) ([][]color.Color, string) {
 		}
 		grid = append(grid, y)
 	}
+	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
+	println("preparing file:", est)
 	return grid, format
 }
 

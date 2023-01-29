@@ -5,6 +5,7 @@ import (
 	"math"
 	"time"
 
+	"go-image-processing/measurements"
 	"go-image-processing/processing"
 	"go-image-processing/utilities"
 )
@@ -19,7 +20,7 @@ func main() {
 	// gray := processing.Grayscale(img)
 	// grayLum := processing.GrayscaleLuminocity(img)
 	// boxBlur := processing.BoxBlur(img, 7)
-	// binary := processing.Binary(img, 185)
+	binary := processing.Binary(img, 185)
 	// inverted := processing.Invert(img)
 	// flippedH := processing.FlipHorizontal(img)
 	// rotate90 := processing.Rotate90(img)
@@ -35,12 +36,12 @@ func main() {
 	// eight := processing.EightColors(img)
 	// rotateN := processing.RotateAngle(img, 52)
 	// hue := processing.HueRotate(img, 52)
-	kuwahara := processing.KuwaharaFilter(img, 7)
+	// kuwahara := processing.KuwaharaFilter(img, 7)
 	// gauss := processing.GaussianBlur(img, 25)
 	// laplasian := processing.LaplasianFilter(img)
 	// sharpen := processing.SharpenFilter(img)
 	est := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
-	println(est)
+	// println(est)
 	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
 	// save("gray-"+name, gray)
 	// utilities.SaveFile("flippedV-"+name, FORMAT, flippedV)
@@ -56,14 +57,17 @@ func main() {
 	// utilities.SaveFile("8colors-"+name, FORMAT, eight)
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
 	// utilities.SaveFile("hue-"+name, FORMAT, hue)
-	utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
+	// utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
 	// utilities.SaveFile("gauss-"+name, FORMAT, gauss)
 	// utilities.SaveFile("laplasian-"+name, FORMAT, laplasian)
 	// utilities.SaveFile("sharp-"+name, FORMAT, sharpen)
 	// save("rotate180-"+name, rotate180)
 	// save("rotate270-"+name, rotate270)
-	// save("binary-"+name, binary)
+	utilities.SaveFile("binary-"+name, FORMAT, binary)
 	// save("gray-lum-"+name, grayLum)
 	// utilities.SaveFile("box-blur-"+name, FORMAT, boxBlur)
 	// save("inverted-"+name, inverted)
+
+	measurements.Binary("testb.png", "images/5.png", 185)
+	println("not fast:", est)
 }
