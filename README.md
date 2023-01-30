@@ -7,9 +7,8 @@ This module is a base for https://github.com/julyskies/brille
 ### Filters to add
 
 1. Gaussian blur (static)
-2. Sharpening filter (static)
-3. Image rotation for any given angle
-4. Bilateral filter (static / dynamic)
+2. Image rotation for any given angle
+3. Bilateral filter (static / dynamic)
 
 ### Optimized filters
 
@@ -53,6 +52,7 @@ These filters are available in [/processing](/processing) directory
 - Rotate image (270 degrees)
 - Rotate image (any given angle) - **in progress**
 - Sepia
+- Sharpen
 - Sobel filter (edge detection, static)
 - Solarize
 

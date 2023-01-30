@@ -1,25 +1,19 @@
 package processing
 
 import (
-	"fmt"
 	"image/color"
 
 	"go-image-processing/utilities"
 )
 
-// var sharpenKernel = [3][3]float64{
-// 	{-0.0023, -0.0432, -0.0023},
-// 	{-0.0432, 1.182, -0.0432},
-// 	{-0.0023, -0.0432, -0.0023},
-// }
-
 var sharpenKernel = [3][3]int{
 	{-1, -1, -1},
-	{-1, 17, -1},
+	{-1, 9, -1},
 	{-1, -1, -1},
 }
 
-func SharpenFilter(source [][]color.Color) [][]color.Color {
+func SharpenFilter(source [][]color.Color, amount uint) [][]color.Color {
+	mix := float64(utilities.MaxMin(amount, 100, 0)) / 100
 	width, height := len(source), len(source[0])
 	destination := utilities.CreateGrid(width, height)
 	for x := 0; x < width; x += 1 {
@@ -37,11 +31,11 @@ func SharpenFilter(source [][]color.Color) [][]color.Color {
 					sumB += int(b) * sharpenKernel[i][j]
 				}
 			}
-			R := uint8(sumR / 9)
-			G := uint8(sumG / 9)
-			B := uint8(sumB / 9)
-			fmt.Println(sumR, R, sumG, G, sumB, B)
-			destination[x][y] = color.RGBA{R, G, B, 255}
+			r, g, b, alpha := utilities.RGBA(source[x][y])
+			R := utilities.MaxMin(float64(sumR)*mix+float64(r)*(1-mix), 255, 0)
+			G := utilities.MaxMin(float64(sumG)*mix+float64(g)*(1-mix), 255, 0)
+			B := utilities.MaxMin(float64(sumB)*mix+float64(b)*(1-mix), 255, 0)
+			destination[x][y] = color.RGBA{uint8(R), uint8(G), uint8(B), alpha}
 		}
 	}
 	return destination
