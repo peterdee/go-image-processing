@@ -12,7 +12,27 @@ This module is a base for https://github.com/julyskies/brille
 4. Image rotation for any given angle
 5. Bilateral filter (static / dynamic)
 
-### Added filters
+### Optimized filters
+
+These filters are available in [/optimized](/optimized) directory
+
+Optimization can be applied to simple color filters
+
+Speed comparison for `Solarize` filter (JPEG, 640x640):
+
+```text
+// optimized (values in ms)
+open 0 convert 14 process 1 save 17 sum 32
+
+// regular (values in ms)
+open 0 convert 33 process 12 save 42 sum 87
+```
+
+Optimized filters can perform up to 10 times faster
+
+### Added filters (non-optimized)
+
+These filters are available in [/processing](/processing) directory
 
 - Binary
 - Box blur (dynamic)
