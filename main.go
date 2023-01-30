@@ -5,7 +5,6 @@ import (
 	"math"
 	"time"
 
-	"go-image-processing/optimized"
 	"go-image-processing/processing"
 	"go-image-processing/utilities"
 )
@@ -13,7 +12,7 @@ import (
 var FORMAT string
 
 func main() {
-	path := "images/7.jpeg"
+	path := "images/10.jpg"
 	img, f, openMS, convertMS := utilities.OpenFile(path)
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -32,12 +31,12 @@ func main() {
 	// gamma := processing.GammaCorrection(img, 0)
 	// bright := processing.Brightness(img, -2225)
 	// contrast := processing.Contrast(img, 225)
-	solarize := processing.Solarize(img, 175)
+	// solarize := processing.Solarize(img, 175)
 	// sepia := processing.Sepia(img)
 	// eight := processing.EightColors(img)
 	// rotateN := processing.RotateAngle(img, 52)
 	// hue := processing.HueRotate(img, 52)
-	// kuwahara := processing.KuwaharaFilter(img, 7)
+	kuwahara := processing.KuwaharaFilter(img, 5)
 	// gauss := processing.GaussianBlur(img, 25)
 	// laplasian := processing.LaplasianFilter(img)
 	// sharpen := processing.SharpenFilter(img)
@@ -53,12 +52,12 @@ func main() {
 	// utilities.SaveFile("gamma-"+name, FORMAT, gamma)
 	// utilities.SaveFile("bright-"+name, FORMAT, bright)
 	// utilities.SaveFile("contrast-"+name, FORMAT, contrast)
-	saveMS := utilities.SaveFile("solar-"+name, FORMAT, solarize)
+	// saveMS := utilities.SaveFile("solar-"+name, FORMAT, solarize)
 	// utilities.SaveFile("sepia-"+name, FORMAT, sepia)
 	// saveMS := utilities.SaveFile("eight-colors-"+name, FORMAT, eight)
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
 	// utilities.SaveFile("hue-"+name, FORMAT, hue)
-	// utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
+	saveMS := utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
 	// utilities.SaveFile("gauss-"+name, FORMAT, gauss)
 	// utilities.SaveFile("laplasian-"+name, FORMAT, laplasian)
 	// utilities.SaveFile("sharp-"+name, FORMAT, sharpen)
@@ -71,7 +70,7 @@ func main() {
 
 	// optimized.Binary(path, 185)
 	// optimized.EightColors(path)
-	optimized.Solarize(path, 175)
+	// optimized.Solarize(path, 175)
 
 	sum := openMS + convertMS + processMS + saveMS
 	println("open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)

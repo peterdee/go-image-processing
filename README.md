@@ -7,10 +7,9 @@ This module is a base for https://github.com/julyskies/brille
 ### Filters to add
 
 1. Gaussian blur (static)
-2. Kuwahara filter (static / dynamic)
-3. Sharpening filter (static)
-4. Image rotation for any given angle
-5. Bilateral filter (static / dynamic)
+2. Sharpening filter (static)
+3. Image rotation for any given angle
+4. Bilateral filter (static / dynamic)
 
 ### Optimized filters
 
@@ -47,7 +46,7 @@ These filters are available in [/processing](/processing) directory
 - Grayscale (luminocity)
 - Hue rotate
 - Inversion
-- Kuwahara filter (edge detection, dynamic) - **in progress**
+- Kuwahara filter (edge detection, dynamic)
 - Laplasian filter (edge detection, static)
 - Rotate image (90 degrees)
 - Rotate image (180 degrees)

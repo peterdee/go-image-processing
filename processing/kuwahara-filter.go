@@ -6,6 +6,17 @@ import (
 	"go-image-processing/utilities"
 )
 
+func getAperture(axisValue, axisMax, apertureMin, apertureMax int) (int, int) {
+	start, end := 0, axisMax
+	if axisValue+apertureMin > 0 {
+		start = axisValue + apertureMin
+	}
+	if axisValue+apertureMax < axisMax {
+		end = axisValue + apertureMax
+	}
+	return start, end
+}
+
 func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 	width, height := len(source), len(source[0])
 	destination := utilities.CreateGrid(width, height)
@@ -21,13 +32,6 @@ func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 	for x := 0; x < width; x += 1 {
 		for y := 0; y < height; y += 1 {
 
-			// TODO: fix
-			if x < halfRadius || x >= width-halfRadius ||
-				y < halfRadius || y >= height-halfRadius {
-				destination[x][y] = source[x][y]
-				continue
-			}
-
 			NumPixels := [4]int{0, 0, 0, 0}
 			RValues := [4]int{0, 0, 0, 0}
 			GValues := [4]int{0, 0, 0, 0}
@@ -40,12 +44,11 @@ func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 			MinBValue := [4]int{255, 255, 255, 255}
 
 			for i := 0; i < 4; i += 1 {
-				for x2 := ApetureMinX[i]; x2 <= ApetureMaxX[i]; x2 += 1 {
-					TempX := x + x2
-					for y2 := ApetureMinY[i]; y2 <= ApetureMaxY[i]; y2 += 1 {
-						TempY := y + y2
-
-						r, g, b, _ := utilities.RGBA(source[TempX][TempY])
+				x2s, x2e := getAperture(x, width, ApetureMinX[i], ApetureMaxX[i])
+				y2s, y2e := getAperture(y, height, ApetureMinY[i], ApetureMaxY[i])
+				for x2 := x2s; x2 < x2e; x2 += 1 {
+					for y2 := y2s; y2 < y2e; y2 += 1 {
+						r, g, b, _ := utilities.RGBA(source[x2][y2])
 						RValues[i] += int(r)
 						GValues[i] += int(g)
 						BValues[i] += int(b)
@@ -75,7 +78,10 @@ func KuwaharaFilter(source [][]color.Color, radius uint) [][]color.Color {
 			j := 0
 			MinDifference := 10000
 			for i := 0; i < 4; i += 1 {
-				CurrentDifference := (MaxRValue[i] - MinRValue[i]) + (MaxGValue[i] - MinGValue[i]) + (MaxBValue[i] - MinBValue[i])
+				cdR := MaxRValue[i] - MinRValue[i]
+				cdG := MaxGValue[i] - MinGValue[i]
+				cdB := MaxBValue[i] - MinBValue[i]
+				CurrentDifference := cdR + cdG + cdB
 				if CurrentDifference < MinDifference && NumPixels[i] > 0 {
 					j = i
 					MinDifference = CurrentDifference
