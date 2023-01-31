@@ -1,9 +1,10 @@
 package optimized
 
 import (
-	"go-image-processing/constants"
 	"math"
 	"time"
+
+	"go-image-processing/constants"
 )
 
 func Grayscale(path, grayscaleType string) {

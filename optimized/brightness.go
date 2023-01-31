@@ -7,17 +7,14 @@ import (
 	"go-image-processing/utilities"
 )
 
-func Sepia(path string) {
+func Brightness(path string, amount int) {
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
+	amount = utilities.MaxMin(amount, 255, -255)
 	for i := 0; i < len(img.Pix); i += 4 {
-		r, g, b := img.Pix[i], img.Pix[i+1], img.Pix[i+2]
-		dR := utilities.MaxMin(0.393*float64(r)+0.769*float64(g)+0.189*float64(b), 255.0, 0.0)
-		dG := utilities.MaxMin(0.349*float64(r)+0.686*float64(g)+0.168*float64(b), 255.0, 0.0)
-		dB := utilities.MaxMin(0.272*float64(r)+0.534*float64(g)+0.131*float64(b), 255.0, 0.0)
-		img.Pix[i] = uint8(dR)
-		img.Pix[i+1] = uint8(dG)
-		img.Pix[i+2] = uint8(dB)
+		img.Pix[i] = uint8(utilities.MaxMin(int(img.Pix[i])+amount, 255, 0))
+		img.Pix[i+1] = uint8(utilities.MaxMin(int(img.Pix[i+1])+amount, 255, 0))
+		img.Pix[i+2] = uint8(utilities.MaxMin(int(img.Pix[i+2])+amount, 255, 0))
 	}
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	saveMS := save(img, format)
