@@ -1,8 +1,11 @@
 package optimized
 
 import (
+	"fmt"
 	"math"
 	"time"
+
+	"go-image-processing/utilities"
 )
 
 var sobelHorizontal = [3][3]int{
@@ -46,14 +49,17 @@ func Sobel(path string) {
 				l := getGradientPoint(y, n, height)
 				px := getPixel(x+k, y+l, width)
 				average := int((img.Pix[px] + img.Pix[px+1] + img.Pix[px+2]) / 3)
-				gradientX += average * sobelHorizontal[m][n]
-				gradientY += average * sobelVertical[m][n]
+				if x == 128 && y == 122 {
+					fmt.Println("fast", m, n, k, l, average, px)
+				}
+				gradientX += utilities.MaxMin(average, 255, 0) * sobelHorizontal[m][n]
+				gradientY += utilities.MaxMin(average, 255, 0) * sobelVertical[m][n]
 			}
 		}
-		colorCode := 255 - uint8(math.Sqrt(float64(gradientX*gradientX+gradientY*gradientY)))
-		img.Pix[i] = colorCode
-		img.Pix[i+1] = colorCode
-		img.Pix[i+2] = colorCode
+		colorCode := 255 - utilities.MaxMin(math.Sqrt(float64(gradientX*gradientX+gradientY*gradientY)), 255, 0)
+		img.Pix[i] = uint8(colorCode)
+		img.Pix[i+1] = uint8(colorCode)
+		img.Pix[i+2] = uint8(colorCode)
 	}
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	saveMS := save(img, format)
