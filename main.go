@@ -14,13 +14,11 @@ import (
 var FORMAT string
 
 func main() {
-	path := "images/7.jpeg"
+	path := "images/6.jpg"
 	img, f, openMS, convertMS := utilities.OpenFile(path)
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
-	// flippedV := processing.FlipVertical(img)
-	// boxBlur := processing.BoxBlur(img, 7)
-	flippedH := processing.FlipHorizontal(img)
+	boxBlur := processing.BoxBlur(img, 7)
 	// rotate90 := processing.Rotate90(img)
 	// rotate270 := processing.Rotate270(img)
 	// rotate180 := processing.Rotate180(img)
@@ -32,8 +30,6 @@ func main() {
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	// println(est)
 	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
-	// saveMS := utilities.SaveFile("flippedV-"+name, FORMAT, flippedV)
-	saveMS := utilities.SaveFile("flippedH-"+name, FORMAT, flippedH)
 	// save("rotate90-"+name, rotate90)
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
 	// saveMS := utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
@@ -42,7 +38,7 @@ func main() {
 	// saveMS := utilities.SaveFile("sharp-"+name, FORMAT, sharpen)
 	// save("rotate180-"+name, rotate180)
 	// save("rotate270-"+name, rotate270)
-	// utilities.SaveFile("box-blur-"+name, FORMAT, boxBlur)
+	saveMS := utilities.SaveFile("box-blur-"+name, FORMAT, boxBlur)
 
 	/* Optimized filters */
 
@@ -51,7 +47,7 @@ func main() {
 	// optimized.Contrast(path, 225)
 	// optimized.EightColors(path)
 	// optimized.Emboss(path)
-	optimized.Flip(path, constants.FLIP_TYPE_HORIZONTAL)
+	optimized.Flip(path, constants.FLIP_TYPE_VERTICAL)
 	// optimized.GammaCorrection(path, 0.7)
 	// optimized.Grayscale(path, constants.GRAYSCALE_TYPE_LUMINOSITY)
 	// optimized.HueRotate(path, 252)
