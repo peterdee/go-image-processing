@@ -5,6 +5,7 @@ import (
 	"math"
 	"time"
 
+	"go-image-processing/constants"
 	"go-image-processing/optimized"
 	"go-image-processing/processing"
 	"go-image-processing/utilities"
@@ -13,18 +14,16 @@ import (
 var FORMAT string
 
 func main() {
-	path := "images/5.png"
+	path := "images/7.jpeg"
 	img, f, openMS, convertMS := utilities.OpenFile(path)
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// flippedV := processing.FlipVertical(img)
 	// boxBlur := processing.BoxBlur(img, 7)
-	// flippedH := processing.FlipHorizontal(img)
+	flippedH := processing.FlipHorizontal(img)
 	// rotate90 := processing.Rotate90(img)
 	// rotate270 := processing.Rotate270(img)
 	// rotate180 := processing.Rotate180(img)
-	sobel := processing.SobelFilter(img)
-	// emboss := processing.EmbossFilter(img)
 	// rotateN := processing.RotateAngle(img, 52)
 	// kuwahara := processing.KuwaharaFilter(img, 5)
 	// gauss := processing.GaussianBlur(img, 25)
@@ -33,11 +32,9 @@ func main() {
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	// println(est)
 	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
-	// utilities.SaveFile("flippedV-"+name, FORMAT, flippedV)
-	// utilities.SaveFile("flippedH-"+name, FORMAT, flippedH)
+	// saveMS := utilities.SaveFile("flippedV-"+name, FORMAT, flippedV)
+	saveMS := utilities.SaveFile("flippedH-"+name, FORMAT, flippedH)
 	// save("rotate90-"+name, rotate90)
-	saveMS := utilities.SaveFile("sobel-"+name, FORMAT, sobel)
-	// utilities.SaveFile("emboss-"+name, FORMAT, emboss)
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
 	// saveMS := utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
 	// utilities.SaveFile("gauss-"+name, FORMAT, gauss)
@@ -53,13 +50,15 @@ func main() {
 	// optimized.Brightness(path, 56)
 	// optimized.Contrast(path, 225)
 	// optimized.EightColors(path)
+	// optimized.Emboss(path)
+	optimized.Flip(path, constants.FLIP_TYPE_HORIZONTAL)
 	// optimized.GammaCorrection(path, 0.7)
 	// optimized.Grayscale(path, constants.GRAYSCALE_TYPE_LUMINOSITY)
 	// optimized.HueRotate(path, 252)
 	// optimized.Invert(path)
 	// optimized.Sepia(path)
 	// optimized.Solarize(path, 175)
-	optimized.Sobel(path)
+	// optimized.Sobel(path)
 
 	sum := openMS + convertMS + processMS + saveMS
 	println("open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)

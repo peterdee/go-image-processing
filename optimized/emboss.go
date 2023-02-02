@@ -7,34 +7,19 @@ import (
 	"go-image-processing/utilities"
 )
 
-var sobelHorizontal = [3][3]int{
-	{-1, 0, 1},
-	{-2, 0, 2},
-	{-1, 0, 1},
-}
-
-var sobelVertical = [3][3]int{
-	{1, 2, 1},
+var embossHorizontal = [3][3]int{
 	{0, 0, 0},
-	{-1, -2, -1},
+	{1, 0, -1},
+	{0, 0, 0},
 }
 
-func getCoordinates(pixel, width int) (int, int) {
-	return pixel % width, int(math.Floor(float64(pixel) / float64(width)))
+var embossVertical = [3][3]int{
+	{0, 1, 0},
+	{0, 0, 0},
+	{0, -1, 0},
 }
 
-func getGradientPoint(axisValue, shift, axisLength int) int {
-	if (axisValue + shift) >= axisLength {
-		return axisLength - axisValue - 1
-	}
-	return shift
-}
-
-func getPixel(x, y, width int) int {
-	return ((y * width) + x) * 4
-}
-
-func Sobel(path string) {
+func Emboss(path string) {
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	width, height := img.Rect.Max.X, img.Rect.Max.Y
@@ -48,8 +33,8 @@ func Sobel(path string) {
 				l := getGradientPoint(y, n, height)
 				px := getPixel(x+k, y+l, width)
 				average := (int(img.Pix[px]) + int(img.Pix[px+1]) + int(img.Pix[px+2])) / 3
-				gradientX += average * sobelHorizontal[m][n]
-				gradientY += average * sobelVertical[m][n]
+				gradientX += average * embossHorizontal[m][n]
+				gradientY += average * embossVertical[m][n]
 			}
 		}
 		colorCode := uint8(

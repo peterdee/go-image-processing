@@ -1,9 +1,13 @@
 package constants
 
-const DEFAULT_BINARY_THRESHOLD = 255
+const DEFAULT_BINARY_THRESHOLD int = 255
 
-const DEFAULT_BLUR_AMOUNT = 5
+const DEFAULT_BLUR_AMOUNT uint = 5
 
-const GRAYSCALE_TYPE_AVERAGE = "average"
+const FLIP_TYPE_HORIZONTAL string = "horizontal"
 
-const GRAYSCALE_TYPE_LUMINOSITY = "luminosity"
+const FLIP_TYPE_VERTICAL string = "vertical"
+
+const GRAYSCALE_TYPE_AVERAGE string = "average"
+
+const GRAYSCALE_TYPE_LUMINOSITY string = "luminosity"
