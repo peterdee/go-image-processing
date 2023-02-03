@@ -9,7 +9,7 @@ import (
 
 func Grayscale(path, grayscaleType string) {
 	if grayscaleType != constants.GRAYSCALE_TYPE_AVERAGE &&
-		grayscaleType != constants.GRAYSCALE_TYPE_LUMINOSITY {
+		grayscaleType != constants.GRAYSCALE_TYPE_LUMINANCE {
 		grayscaleType = constants.GRAYSCALE_TYPE_AVERAGE
 	}
 	img, format, openMS, convertMS := open(path)

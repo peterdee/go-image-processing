@@ -14,45 +14,37 @@ import (
 var FORMAT string
 
 func main() {
-	path := "images/6.jpg"
+	path := "images/7.jpeg"
 	img, f, openMS, convertMS := utilities.OpenFile(path)
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
-	boxBlur := processing.BoxBlur(img, 7)
-	// rotate90 := processing.Rotate90(img)
-	// rotate270 := processing.Rotate270(img)
-	// rotate180 := processing.Rotate180(img)
 	// rotateN := processing.RotateAngle(img, 52)
-	// kuwahara := processing.KuwaharaFilter(img, 5)
+	kuwahara := processing.KuwaharaFilter(img, 5)
 	// gauss := processing.GaussianBlur(img, 25)
-	// laplasian := processing.LaplasianFilter(img)
-	// sharpen := processing.SharpenFilter(img, 99)
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	// println(est)
 	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
-	// save("rotate90-"+name, rotate90)
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
-	// saveMS := utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
+	saveMS := utilities.SaveFile("kuwahara-"+name, FORMAT, kuwahara)
 	// utilities.SaveFile("gauss-"+name, FORMAT, gauss)
-	// utilities.SaveFile("laplasian-"+name, FORMAT, laplasian)
-	// saveMS := utilities.SaveFile("sharp-"+name, FORMAT, sharpen)
-	// save("rotate180-"+name, rotate180)
-	// save("rotate270-"+name, rotate270)
-	saveMS := utilities.SaveFile("box-blur-"+name, FORMAT, boxBlur)
 
 	/* Optimized filters */
 
 	// optimized.Binary(path, 185)
+	// optimized.BoxBlur(path, 7)
 	// optimized.Brightness(path, 56)
 	// optimized.Contrast(path, 225)
 	// optimized.EightColors(path)
 	// optimized.Emboss(path)
-	optimized.Flip(path, constants.FLIP_TYPE_VERTICAL)
+	// optimized.Flip(path, constants.FLIP_TYPE_VERTICAL)
 	// optimized.GammaCorrection(path, 0.7)
 	// optimized.Grayscale(path, constants.GRAYSCALE_TYPE_LUMINOSITY)
 	// optimized.HueRotate(path, 252)
 	// optimized.Invert(path)
+	// optimized.Laplacian(path)
+	optimized.RotateFixed(path, constants.ROTATE_FIXED_90)
 	// optimized.Sepia(path)
+	// optimized.Sharpen(path, 92)
 	// optimized.Solarize(path, 175)
 	// optimized.Sobel(path)
 

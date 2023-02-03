@@ -10,4 +10,10 @@ const FLIP_TYPE_VERTICAL string = "vertical"
 
 const GRAYSCALE_TYPE_AVERAGE string = "average"
 
-const GRAYSCALE_TYPE_LUMINOSITY string = "luminosity"
+const GRAYSCALE_TYPE_LUMINANCE string = "luminance"
+
+const ROTATE_FIXED_90 uint = 90
+
+const ROTATE_FIXED_180 uint = 180
+
+const ROTATE_FIXED_270 uint = 270
