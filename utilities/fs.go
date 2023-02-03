@@ -1,6 +1,7 @@
 package utilities
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
@@ -52,6 +53,28 @@ func SaveFile(name, format string, grid [][]color.Color) int {
 			img.Set(x, y, grid[x][y])
 		}
 	}
+	newFile, err := os.Create("images/" + name)
+	if err != nil {
+		log.Fatal("Could not save the file")
+	}
+	defer newFile.Close()
+	if format == "png" {
+		png.Encode(newFile, img.SubImage(img.Rect))
+	} else {
+		jpeg.Encode(
+			newFile,
+			img.SubImage(img.Rect),
+			&jpeg.Options{
+				Quality: 100,
+			},
+		)
+	}
+	return int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
+}
+
+func SaveImage(img *image.RGBA, format string) int {
+	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), format)
+	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	newFile, err := os.Create("images/" + name)
 	if err != nil {
 		log.Fatal("Could not save the file")

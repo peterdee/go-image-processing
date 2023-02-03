@@ -1,22 +1,24 @@
-package optimized
+package filters
 
 import (
 	"math"
 	"time"
 )
 
-func Binary(path string, threshold uint8) {
+func applySolarizeThreshold(subpixel, threshold uint8) uint8 {
+	if subpixel < threshold {
+		return 255 - subpixel
+	}
+	return subpixel
+}
+
+func Solarize(path string, threshold uint8) {
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	for i := 0; i < len(img.Pix); i += 4 {
-		average := uint8((int(img.Pix[i]) + int(img.Pix[i+1]) + int(img.Pix[i+2])) / 3)
-		partial := uint8(255)
-		if average < threshold {
-			partial = 0
-		}
-		img.Pix[i] = partial
-		img.Pix[i+1] = partial
-		img.Pix[i+2] = partial
+		img.Pix[i] = applySolarizeThreshold(img.Pix[i], threshold)
+		img.Pix[i+1] = applySolarizeThreshold(img.Pix[i+1], threshold)
+		img.Pix[i+2] = applySolarizeThreshold(img.Pix[i+2], threshold)
 	}
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	saveMS := save(img, format)

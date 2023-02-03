@@ -1,4 +1,4 @@
-package optimized
+package filters
 
 import (
 	"math"

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-image-processing/optimized"
+	"go-image-processing/filters"
 )
 
 var FORMAT string
@@ -21,24 +21,24 @@ func main() {
 
 	/* Optimized filters */
 
-	// optimized.Binary(path, 185)
-	// optimized.BoxBlur(path, 7)
-	// optimized.Brightness(path, 56)
-	// optimized.Contrast(path, 225)
-	// optimized.EightColors(path)
-	// optimized.Emboss(path)
-	// optimized.Flip(path, constants.FLIP_TYPE_VERTICAL)
-	// optimized.GammaCorrection(path, 0.7)
-	// optimized.Grayscale(path, constants.GRAYSCALE_TYPE_LUMINOSITY)
-	// optimized.HueRotate(path, 252)
-	// optimized.Invert(path)
-	// optimized.Kuwahara(path, 7)
-	optimized.Laplacian(path)
-	// optimized.RotateFixed(path, constants.ROTATE_FIXED_90)
-	// optimized.Sepia(path)
-	// optimized.Sharpen(path, 92)
-	// optimized.Solarize(path, 175)
-	// optimized.Sobel(path)
+	// filters.Binary(path, 185)
+	// filters.BoxBlur(path, 7)
+	// filters.Brightness(path, 56)
+	// filters.Contrast(path, 225)
+	// filters.EightColors(path)
+	// filters.Emboss(path)
+	// filters.Flip(path, constants.FLIP_TYPE_VERTICAL)
+	// filters.GammaCorrection(path, 0.7)
+	// filters.Grayscale(path, constants.GRAYSCALE_TYPE_LUMINOSITY)
+	// filters.HueRotate(path, 252)
+	// filters.Invert(path)
+	// filters.Kuwahara(path, 7)
+	filters.Laplacian(path)
+	// filters.RotateFixed(path, constants.ROTATE_FIXED_90)
+	// filters.Sepia(path)
+	// filters.Sharpen(path, 92)
+	// filters.Solarize(path, 175)
+	// filters.Sobel(path)
 
 	// sum := openMS + convertMS + processMS + saveMS
 	// println("open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
