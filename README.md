@@ -6,31 +6,13 @@ This module is a base for https://github.com/julyskies/brille
 
 ### Filters to add
 
-1. Gaussian blur (static)
-2. Image rotation for any given angle
-3. Bilateral filter (static / dynamic)
+1. Bilateral filter (static / dynamic)
+2. Gaussian blur (static)
+3. Image rotation for any given angle
 
-### Optimized filters
+### Available filters
 
-These filters are available in [/optimized](/optimized) directory
-
-Optimization can be applied to simple color filters
-
-Speed comparison for `Solarize` filter (JPEG, 640x640):
-
-```text
-// optimized (values in ms)
-open 0 convert 14 process 1 save 17 sum 32
-
-// regular (values in ms)
-open 0 convert 33 process 12 save 42 sum 87
-```
-
-Optimized filters can perform up to 10 times faster
-
-### Added filters (non-optimized)
-
-These filters are available in [/processing](/processing) directory
+These filters are ready to be used and were optimized compared to previous implementations
 
 - Binary
 - Box blur (dynamic)
@@ -38,23 +20,25 @@ These filters are available in [/processing](/processing) directory
 - Contrast
 - Eight colors (color reduction filter)
 - Emboss filter (edge detection, static)
-- Flip horizontal
-- Flip vertical
+- Flip image (horizontal, vertical)
 - Gamma correction
-- Grayscale (average)
-- Grayscale (luminocity)
+- Grayscale (average, luminance)
 - Hue rotate
 - Inversion
-- Kuwahara filter (edge detection, dynamic)
-- Laplasian filter (edge detection, static)
-- Rotate image (90 degrees)
-- Rotate image (180 degrees)
-- Rotate image (270 degrees)
-- Rotate image (any given angle) - **in progress**
+- Kuwahara filter (edge detection / coloring, dynamic)
+- Laplacian filter (edge detection, static)
+- Rotate image by fixed angle (90 / 180 / 270 degrees)
 - Sepia
-- Sharpen
+- Sharpen filter (dynamic)
 - Sobel filter (edge detection, static)
 - Solarize
+
+### In progress
+
+These filters are not ready yet
+
+- Gaussian blur (dynamic)
+- Rotate image by any given angle
 
 ### License
 

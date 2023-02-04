@@ -7,7 +7,7 @@ import (
 	"go-image-processing/utilities"
 )
 
-var DEG float64 = math.Pi / 180
+const DEG float64 = math.Pi / 180
 
 func HueRotate(path string, angle int) {
 	img, format, openMS, convertMS := open(path)

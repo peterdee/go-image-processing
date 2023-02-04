@@ -29,9 +29,8 @@ func Laplacian(path string) {
 				averageSum += average * laplacianKernel[m][n]
 			}
 		}
-		img.Pix[i] = 255 - uint8(utilities.MaxMin(averageSum, 255, 0))
-		img.Pix[i+1] = 255 - uint8(utilities.MaxMin(averageSum, 255, 0))
-		img.Pix[i+2] = 255 - uint8(utilities.MaxMin(averageSum, 255, 0))
+		channel := 255 - uint8(utilities.MaxMin(averageSum, 255, 0))
+		img.Pix[i], img.Pix[i+1], img.Pix[i+2] = channel, channel, channel
 	}
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	saveMS := save(img, format)

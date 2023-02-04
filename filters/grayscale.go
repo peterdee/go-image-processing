@@ -15,17 +15,15 @@ func Grayscale(path, grayscaleType string) {
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	for i := 0; i < len(img.Pix); i += 4 {
-		var subpixel uint8
+		var channel uint8
 		if grayscaleType == constants.GRAYSCALE_TYPE_AVERAGE {
-			subpixel = uint8((int(img.Pix[i]) + int(img.Pix[i+1]) + int(img.Pix[i+2])) / 3)
+			channel = uint8((int(img.Pix[i]) + int(img.Pix[i+1]) + int(img.Pix[i+2])) / 3)
 		} else {
-			subpixel = uint8(
+			channel = uint8(
 				(float64(img.Pix[i])*0.21 + float64(img.Pix[i+1])*0.72 + float64(img.Pix[i+2])*0.07),
 			)
 		}
-		img.Pix[i] = subpixel
-		img.Pix[i+1] = subpixel
-		img.Pix[i+2] = subpixel
+		img.Pix[i], img.Pix[i+1], img.Pix[i+2] = channel, channel, channel
 	}
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	saveMS := save(img, format)
