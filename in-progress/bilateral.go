@@ -22,8 +22,8 @@ func Bilateral(source [][]color.Color) [][]color.Color {
 	// TODO: these should be arguments
 	radius := 8
 	diameter := radius * 2
-	sigmaI := 12.0
-	sigmaS := 16.0
+	sigmaI := 24.0
+	sigmaS := 32.0
 
 	for x := 0; x < width; x += 1 {
 		for y := 0; y < height; y += 1 {

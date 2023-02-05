@@ -37,6 +37,7 @@ These filters are ready to be used and were optimized compared to previous imple
 
 These filters are not ready yet
 
+- Bilateral filter (static / dynamic)
 - Gaussian blur (dynamic)
 - Rotate image by any given angle
 

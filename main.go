@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"go-image-processing/constants"
-	"go-image-processing/filters"
 	progress "go-image-processing/in-progress"
 	"go-image-processing/utilities"
 	"math"
@@ -18,13 +16,13 @@ func main() {
 	FORMAT = f
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// rotateN := processing.RotateAngle(img, 52)
-	// gauss := processing.GaussianBlur(img, 25)
-	bilateral := progress.Bilateral(img)
+	gauss := progress.GaussianBlur(img, 5)
+	// bilateral := progress.Bilateral(img)
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
-	// saveMS := utilities.SaveFile("gauss-"+name, FORMAT, gauss)
-	saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
+	saveMS := utilities.SaveFile("gauss-"+name, FORMAT, gauss)
+	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
 
 	/* Optimized filters */
 
@@ -36,7 +34,7 @@ func main() {
 	// filters.Emboss(path)
 	// filters.Flip(path, constants.FLIP_TYPE_VERTICAL)
 	// filters.GammaCorrection(path, 0.7)
-	filters.Grayscale(path, constants.GRAYSCALE_TYPE_AVERAGE)
+	// filters.Grayscale(path, constants.GRAYSCALE_TYPE_AVERAGE)
 	// filters.HueRotate(path, 252)
 	// filters.Invert(path)
 	// filters.Kuwahara(path, 7)
