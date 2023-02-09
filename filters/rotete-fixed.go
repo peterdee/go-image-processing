@@ -26,13 +26,14 @@ func RotateFixed(path string, angle uint) {
 	if angle == constants.ROTATE_FIXED_180 {
 		for i := 0; i < len(img.Pix); i += 4 {
 			x, y := getCoordinates(i/4, width)
-			r, g, b := img.Pix[i], img.Pix[i+1], img.Pix[i+2]
-			var j int
 			if y < height/2+heightCorrection {
-				j = getPixel(width-x-1, height-y-1, width)
+				j := getPixel(width-x-1, height-y-1, width)
+				r, g, b := img.Pix[i], img.Pix[i+1], img.Pix[i+2]
+				img.Pix[i], img.Pix[i+1], img.Pix[i+2] = img.Pix[j], img.Pix[j+1], img.Pix[j+2]
+				if i != j {
+					img.Pix[j], img.Pix[j+1], img.Pix[j+2] = r, g, b
+				}
 			}
-			img.Pix[i], img.Pix[i+1], img.Pix[i+2] = img.Pix[j], img.Pix[j+1], img.Pix[j+2]
-			img.Pix[j], img.Pix[j+1], img.Pix[j+2] = r, g, b
 		}
 		processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 		saveMS := save(img, format)

@@ -1,27 +1,24 @@
 package main
 
 import (
-	"fmt"
-	progress "go-image-processing/in-progress"
-	"go-image-processing/utilities"
-	"math"
-	"time"
+	"go-image-processing/constants"
+	"go-image-processing/filters"
 )
 
 var FORMAT string
 
 func main() {
-	path := "images/5.png"
-	img, f, openMS, convertMS := utilities.OpenFile(path)
-	FORMAT = f
-	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
+	path := "images/0.jpg"
+	// img, f, openMS, convertMS := utilities.OpenFile(path)
+	// FORMAT = f
+	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// rotateN := processing.RotateAngle(img, 52)
-	gauss := progress.GaussianBlur(img, 5)
+	// gauss := progress.GaussianBlur(img, 5)
 	// bilateral := progress.Bilateral(img)
-	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
-	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
+	// processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
+	// name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
-	saveMS := utilities.SaveFile("gauss-"+name, FORMAT, gauss)
+	// saveMS := utilities.SaveFile("gauss-"+name, FORMAT, gauss)
 	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
 
 	/* Optimized filters */
@@ -37,14 +34,14 @@ func main() {
 	// filters.Grayscale(path, constants.GRAYSCALE_TYPE_AVERAGE)
 	// filters.HueRotate(path, 252)
 	// filters.Invert(path)
-	// filters.Kuwahara(path, 7)
+	// filters.Kuwahara(path, 17)
 	// filters.Laplacian(path)
-	// filters.RotateFixed(path, constants.ROTATE_FIXED_90)
+	filters.RotateFixed(path, constants.ROTATE_FIXED_180)
 	// filters.Sepia(path)
 	// filters.Sharpen(path, 92)
 	// filters.Sobel(path)
 	// filters.Solarize(path, 175)
 
-	sum := openMS + convertMS + processMS + saveMS
-	println("open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
+	// sum := openMS + convertMS + processMS + saveMS
+	// println("open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
 }
