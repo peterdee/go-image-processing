@@ -19,55 +19,36 @@ func RotateFixed(path string, angle uint) {
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	width, height := img.Rect.Max.X, img.Rect.Max.Y
-	heightCorrection := 0
-	if height%2 != 0 {
-		heightCorrection = 1
-	}
+	gridWidth, gridHeight := width, height
 	if angle == constants.ROTATE_FIXED_180 {
-		for i := 0; i < len(img.Pix); i += 4 {
-			x, y := getCoordinates(i/4, width)
-			if y < height/2+heightCorrection {
-				j := getPixel(width-x-1, height-y-1, width)
-				r, g, b := img.Pix[i], img.Pix[i+1], img.Pix[i+2]
-				img.Pix[i], img.Pix[i+1], img.Pix[i+2] = img.Pix[j], img.Pix[j+1], img.Pix[j+2]
-				if i != j {
-					img.Pix[j], img.Pix[j+1], img.Pix[j+2] = r, g, b
-				}
-			}
-		}
-		processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
-		saveMS := save(img, format)
-		sum := openMS + convertMS + processMS + saveMS
-		println("open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
+		gridWidth, gridHeight = height, width
 	}
-	if angle == constants.ROTATE_FIXED_90 || angle == constants.ROTATE_FIXED_270 {
-		destination := utilities.CreateGrid(height, width)
-		for i := 0; i < len(img.Pix); i += 4 {
-			x, y := getCoordinates(i/4, width)
-			if angle == constants.ROTATE_FIXED_90 {
-				destination[height-y-1][x] = color.RGBA{
-					img.Pix[i],
-					img.Pix[i+1],
-					img.Pix[i+2],
-					img.Pix[i+3],
-				}
-			}
-			if angle == constants.ROTATE_FIXED_270 {
-				destination[y][width-x-1] = color.RGBA{
-					img.Pix[i],
-					img.Pix[i+1],
-					img.Pix[i+2],
-					img.Pix[i+3],
-				}
-			}
+	destination := utilities.CreateGrid(gridWidth, gridHeight)
+	for i := 0; i < len(img.Pix); i += 4 {
+		x, y := getCoordinates(i/4, width)
+		dx, dy := x, y
+		if angle == constants.ROTATE_FIXED_90 {
+			dx, dy = height-y-1, x
 		}
-		processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
-		saveMS := utilities.SaveFile(
-			fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), format),
-			format,
-			destination,
-		)
-		sum := openMS + convertMS + processMS + saveMS
-		println("open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
+		if angle == constants.ROTATE_FIXED_180 {
+			dx, dy = width-x-1, height-y-1
+		}
+		if angle == constants.ROTATE_FIXED_270 {
+			dx, dy = y, width-x-1
+		}
+		destination[dx][dy] = color.RGBA{
+			img.Pix[i],
+			img.Pix[i+1],
+			img.Pix[i+2],
+			img.Pix[i+3],
+		}
 	}
+	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
+	saveMS := utilities.SaveFile(
+		fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), format),
+		format,
+		destination,
+	)
+	sum := openMS + convertMS + processMS + saveMS
+	println("open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
 }

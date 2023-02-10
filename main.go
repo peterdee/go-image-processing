@@ -8,7 +8,7 @@ import (
 var FORMAT string
 
 func main() {
-	path := "images/0.jpg"
+	path := "images/12.jpeg"
 	// img, f, openMS, convertMS := utilities.OpenFile(path)
 	// FORMAT = f
 	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -36,7 +36,7 @@ func main() {
 	// filters.Invert(path)
 	// filters.Kuwahara(path, 17)
 	// filters.Laplacian(path)
-	filters.RotateFixed(path, constants.ROTATE_FIXED_180)
+	filters.RotateFixed(path, constants.ROTATE_FIXED_270)
 	// filters.Sepia(path)
 	// filters.Sharpen(path, 92)
 	// filters.Sobel(path)
