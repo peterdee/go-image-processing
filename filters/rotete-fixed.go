@@ -26,15 +26,15 @@ func RotateFixed(path string, angle uint) {
 	destination := utilities.CreateGrid(gridWidth, gridHeight)
 	for i := 0; i < len(img.Pix); i += 4 {
 		x, y := getCoordinates(i/4, width)
-		dx, dy := x, y
+		dx, dy := y, x
 		if angle == constants.ROTATE_FIXED_90 {
-			dx, dy = height-y-1, x
+			dx = height - y - 1
 		}
 		if angle == constants.ROTATE_FIXED_180 {
 			dx, dy = width-x-1, height-y-1
 		}
 		if angle == constants.ROTATE_FIXED_270 {
-			dx, dy = y, width-x-1
+			dy = width - x - 1
 		}
 		destination[dx][dy] = color.RGBA{
 			img.Pix[i],
