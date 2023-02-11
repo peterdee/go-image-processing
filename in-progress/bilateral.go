@@ -15,15 +15,11 @@ func gaussian(x int, sigma float64) float64 {
 	return (1.0 / (2 * math.Pi * (math.Pow(sigma, 2)))) * math.Exp(-(math.Pow(float64(x), 2))/(2*math.Pow(sigma, 2)))
 }
 
-func Bilateral(source [][]color.Color) [][]color.Color {
+func Bilateral(source [][]color.Color, radius int, sigmaI, sigmaS float64) [][]color.Color {
 	width, height := len(source), len(source[0])
 	destination := utilities.CreateGrid(width, height)
 
-	// TODO: these should be arguments
-	radius := 8
 	diameter := radius * 2
-	sigmaI := 24.0
-	sigmaS := 32.0
 
 	for x := 0; x < width; x += 1 {
 		for y := 0; y < height; y += 1 {
@@ -67,12 +63,9 @@ func Bilateral(source [][]color.Color) [][]color.Color {
 					WpB += wB
 				}
 			}
-			filteredR /= WpR
-			filteredG /= WpG
-			filteredB /= WpB
-			R := uint8(utilities.MaxMin(filteredR, 255, 0))
-			G := uint8(utilities.MaxMin(filteredG, 255, 0))
-			B := uint8(utilities.MaxMin(filteredB, 255, 0))
+			R := uint8(utilities.MaxMin(filteredR/WpR, 255, 0))
+			G := uint8(utilities.MaxMin(filteredG/WpG, 255, 0))
+			B := uint8(utilities.MaxMin(filteredB/WpB, 255, 0))
 			destination[x][y] = color.RGBA{R, G, B, 255}
 		}
 	}
