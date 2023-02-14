@@ -20,7 +20,7 @@ func RotateFixed(path string, angle uint) {
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	width, height := img.Rect.Max.X, img.Rect.Max.Y
 	gridWidth, gridHeight := width, height
-	if angle == constants.ROTATE_FIXED_180 {
+	if angle != constants.ROTATE_FIXED_180 {
 		gridWidth, gridHeight = height, width
 	}
 	destination := utilities.CreateGrid(gridWidth, gridHeight)

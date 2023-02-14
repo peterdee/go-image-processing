@@ -36,7 +36,7 @@ func main() {
 	// filters.Invert(path)
 	// filters.Kuwahara(path, 4)
 	// filters.Laplacian(path)
-	// filters.RotateFixed(path, constants.ROTATE_FIXED_90)
+	filters.RotateFixed(path, constants.ROTATE_FIXED_90)
 	// filters.Sepia(path)
 	// filters.Sharpen(path, 92)
 	// filters.Sobel(path)
