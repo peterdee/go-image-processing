@@ -1,14 +1,11 @@
 package main
 
-import (
-	"go-image-processing/constants"
-	"go-image-processing/filters"
-)
+import progress "go-image-processing/in-progress"
 
 var FORMAT string
 
 func main() {
-	path := "images/2.jpeg"
+	path := "images/big.jpg"
 	// img, f, openMS, convertMS := utilities.OpenFile(path)
 	// FORMAT = f
 	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -20,6 +17,8 @@ func main() {
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
 	// saveMS := utilities.SaveFile("gauss-"+name, FORMAT, gauss)
 	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
+
+	progress.BinaryEF(path, 185)
 
 	/* Optimized filters */
 
