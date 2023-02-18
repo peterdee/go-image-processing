@@ -5,7 +5,7 @@ import progress "go-image-processing/in-progress"
 var FORMAT string
 
 func main() {
-	path := "images/big.jpg"
+	path := "images/5.png"
 	// img, f, openMS, convertMS := utilities.OpenFile(path)
 	// FORMAT = f
 	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -18,12 +18,12 @@ func main() {
 	// saveMS := utilities.SaveFile("gauss-"+name, FORMAT, gauss)
 	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
 
-	progress.BinaryEF(path, 185)
+	progress.BinaryEFSlices(path, 125)
 
 	/* Optimized filters */
 
 	// filters.BilateralSlow(path, 3, 10, 15)
-	// filters.Binary(path, 185)
+	// filters.Binary(path, 125)
 	// filters.BoxBlur(path, 7)
 	// filters.Brightness(path, 56)
 	// filters.Contrast(path, 225)
@@ -36,7 +36,7 @@ func main() {
 	// filters.Invert(path)
 	// filters.Kuwahara(path, 4)
 	// filters.Laplacian(path)
-	filters.RotateFixed(path, constants.ROTATE_FIXED_90)
+	// filters.RotateFixed(path, constants.ROTATE_FIXED_90)
 	// filters.Sepia(path)
 	// filters.Sharpen(path, 92)
 	// filters.Sobel(path)
