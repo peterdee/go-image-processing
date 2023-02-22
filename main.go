@@ -7,7 +7,7 @@ import (
 var FORMAT string
 
 func main() {
-	path := "images/7.jpeg"
+	path := "images/6.png"
 	// img, f, openMS, convertMS := utilities.OpenFile(path)
 	// FORMAT = f
 	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -23,7 +23,8 @@ func main() {
 	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
 
 	// progress.BinaryEFSlices(path, 125)
-	progress.GaussianBlur(path, 15)
+	// progress.GaussianBlur(path, 2)
+	progress.GaussianBlurEF(path, 2)
 
 	/* Optimized filters */
 
