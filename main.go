@@ -1,32 +1,29 @@
 package main
 
 import (
-	"fmt"
 	progress "go-image-processing/in-progress"
-	"go-image-processing/utilities"
-	"math"
-	"time"
 )
 
 var FORMAT string
 
 func main() {
-	path := "images/11.jpeg"
-	img, f, openMS, convertMS := utilities.OpenFile(path)
-	FORMAT = f
-	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
+	path := "images/7.jpeg"
+	// img, f, openMS, convertMS := utilities.OpenFile(path)
+	// FORMAT = f
+	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	// rotateN := processing.RotateAngle(img, 52)
 	// gauss := progress.GaussianBlur(img, 5)
-	gaussEF := progress.GaussianBlurEF(img, 5)
+	// gaussEF := progress.GaussianBlurEF(img, 5)
 	// bilateral := progress.Bilateral(img, 3, 10, 15)
-	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
-	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
+	// processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
+	// name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
 	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
 	// saveMS := utilities.SaveFile("gauss-"+name, FORMAT, gauss)
-	saveMS := utilities.SaveFile("gaussEF-"+name, FORMAT, gaussEF)
+	// saveMS := utilities.SaveFile("gaussEF-"+name, FORMAT, gaussEF)
 	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
 
 	// progress.BinaryEFSlices(path, 125)
+	progress.GaussianBlur(path, 15)
 
 	/* Optimized filters */
 
@@ -50,6 +47,6 @@ func main() {
 	// filters.Sobel(path)
 	// filters.Solarize(path, 175)
 
-	sum := openMS + convertMS + processMS + saveMS
-	println("s open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
+	// sum := openMS + convertMS + processMS + saveMS
+	// println("s open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
 }
