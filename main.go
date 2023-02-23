@@ -7,7 +7,7 @@ import (
 var FORMAT string
 
 func main() {
-	path := "images/10.jpg"
+	path := "images/11.jpeg"
 	// img, f, openMS, convertMS := utilities.OpenFile(path)
 	// FORMAT = f
 	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -24,8 +24,8 @@ func main() {
 
 	// progress.BinaryEFSlices(path, 125)
 	// progress.GaussianBlur(path, 24)
-	// progress.GaussianBlurEF(path, 25)
-	progress.GaussianBlurEMF(path, 25)
+	progress.GaussianBlurEF(path, 25)
+	// progress.GaussianBlurEMF(path, 25)
 
 	/* Optimized filters */
 

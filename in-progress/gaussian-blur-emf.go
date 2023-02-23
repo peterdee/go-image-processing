@@ -9,6 +9,7 @@ import (
 	"go-image-processing/utilities"
 )
 
+// Gaussian blur: even more faster
 func GaussianBlurEMF(path string, sigma float64) {
 	if sigma < 0 {
 		sigma *= -1
