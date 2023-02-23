@@ -9,7 +9,7 @@ import (
 	"go-image-processing/utilities"
 )
 
-// Gaussian blur: even faster
+// Gaussian blur: even faster (sync.WaitGroup)
 func GaussianBlurEF(path string, sigma float64) {
 	if sigma < 0 {
 		sigma *= -1

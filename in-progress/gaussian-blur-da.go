@@ -3,14 +3,20 @@ package progress
 import (
 	"math"
 	"runtime"
-	"sync"
 	"time"
 
 	"go-image-processing/utilities"
 )
 
-// Gaussian blur: even more faster (sync.WaitGroup)
-func GaussianBlurEMF(path string, sigma float64) {
+func clampMax[T float64 | int | uint8](value, max T) T {
+	if value > max {
+		return max
+	}
+	return value
+}
+
+// Gaussian blur: different approach (channels)
+func GaussianBlurDA(path string, sigma float64) {
 	if sigma < 0 {
 		sigma *= -1
 	}
@@ -26,11 +32,8 @@ func GaussianBlurEMF(path string, sigma float64) {
 	pixPerThreadRaw := float64(pixLen) / float64(threads)
 	pixPerThread := int(pixPerThreadRaw + (float64(threads) - math.Mod(pixPerThreadRaw, 4.0)))
 
-	var wg sync.WaitGroup
-
-	processing := func(start int, direction string) {
-		defer wg.Done()
-		end := utilities.MaxMin(start+pixPerThread, pixLen, 0)
+	processing := func(start int, direction string, ch chan int, thread int) {
+		end := clampMax(start+pixPerThread, pixLen)
 		for i := start; i < end; i += 4 {
 			x, y := getCoordinates(i/4, width)
 			sumR := 0.0
@@ -68,23 +71,35 @@ func GaussianBlurEMF(path string, sigma float64) {
 				img.Pix[i+2] = uint8(utilities.MaxMin(sumB, 255, 0))
 			}
 		}
+		ch <- thread
 	}
 
 	// horizontal
+	ch := make(chan int)
+	resH := make([]int, 0)
 	for t := 0; t < threads; t += 1 {
-		wg.Add(1)
-		go processing(pixPerThread*t, "horizontal")
+		go processing(pixPerThread*t, "horizontal", ch, t)
 	}
-
-	wg.Wait()
+	for {
+		result := <-ch
+		resH = append(resH, result)
+		if len(resH) == threads {
+			break
+		}
+	}
 
 	// vertical
+	resV := make([]int, 0)
 	for t := 0; t < threads; t += 1 {
-		wg.Add(1)
-		go processing(pixPerThread*t, "vertical")
+		go processing(pixPerThread*t, "vertical", ch, t)
 	}
-
-	wg.Wait()
+	for {
+		result := <-ch
+		resV = append(resV, result)
+		if len(resV) == threads {
+			break
+		}
+	}
 
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	saveMS := save(img, format, 1)

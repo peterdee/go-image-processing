@@ -40,6 +40,7 @@ func getPixel(x, y, width int) int {
 	return ((y * width) + x) * 4
 }
 
+// Gaussian blur: single thread
 func GaussianBlur(path string, sigma float64) {
 	if sigma < 0 {
 		sigma *= -1
