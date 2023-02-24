@@ -8,6 +8,31 @@ import (
 	"go-image-processing/utilities"
 )
 
+const K float64 = 6
+
+func createKernel(sigma float64) []float64 {
+	dim := math.Max(3.0, K*sigma)
+	sqrtSigmaPi2 := math.Sqrt(math.Pi*2.0) * sigma
+	s2 := 2.0 * sigma * sigma
+	sum := 0.0
+	kDim := dim
+	if int(kDim)%2 == 0 {
+		kDim = dim - 1
+	}
+	kernel := make([]float64, int(kDim))
+	half := int(len(kernel) / 2)
+	i := -half
+	for j := 0; j < len(kernel); j += 1 {
+		kernel[j] = math.Exp(-float64(i*i)/(s2)) / sqrtSigmaPi2
+		sum += kernel[j]
+		i += 1
+	}
+	for k := 0; k < int(kDim); k += 1 {
+		kernel[k] /= sum
+	}
+	return kernel
+}
+
 func clampMax[T float64 | int | uint8](value, max T) T {
 	if value > max {
 		return max
@@ -15,8 +40,16 @@ func clampMax[T float64 | int | uint8](value, max T) T {
 	return value
 }
 
-// Gaussian blur: different approach (channels) - top 2
-func GaussianBlurDA(path string, sigma float64) {
+func getCoordinates(pixel, width int) (int, int) {
+	return pixel % width, int(math.Floor(float64(pixel) / float64(width)))
+}
+
+func getPixel(x, y, width int) int {
+	return ((y * width) + x) * 4
+}
+
+// Gaussian blur that uses channels - the same performance as WaitGroup
+func GaussianBlurCH(path string, sigma float64) {
 	if sigma < 0 {
 		sigma *= -1
 	}

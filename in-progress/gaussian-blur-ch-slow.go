@@ -3,14 +3,13 @@ package progress
 import (
 	"math"
 	"runtime"
-	"sync"
 	"time"
 
 	"go-image-processing/utilities"
 )
 
-// Gaussian blur: even faster (sync.WaitGroup) - top 3
-func GaussianBlurEF(path string, sigma float64) {
+// Gaussian blur that uses channels - slower version
+func GaussianBlurCHSlow(path string, sigma float64) {
 	if sigma < 0 {
 		sigma *= -1
 	}
@@ -18,26 +17,25 @@ func GaussianBlurEF(path string, sigma float64) {
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 
 	kernel := createKernel(sigma)
+	kernelLen := len(kernel)
 	pixLen := len(img.Pix)
 	width, height := img.Rect.Max.X, img.Rect.Max.Y
 	temp := make([]uint8, len(img.Pix))
 	threads := runtime.NumCPU()
 
+	signal := make(chan struct{}, threads)
 	step := 4
 
-	var wg sync.WaitGroup
-
 	processing := func(i int, direction string) {
-		defer wg.Done()
 		x, y := getCoordinates(i/4, width)
 		sumR := 0.0
 		sumG := 0.0
 		sumB := 0.0
-		for k := 0; k < len(kernel); k += 1 {
+		for k := 0; k < kernelLen; k += 1 {
 			var px int
 			if direction == "horizontal" {
 				px = getPixel(
-					utilities.MaxMin(x-(len(kernel)/2-k), width-1, 0),
+					utilities.MaxMin(x-(kernelLen/2-k), width-1, 0),
 					y,
 					width,
 				)
@@ -47,7 +45,7 @@ func GaussianBlurEF(path string, sigma float64) {
 			} else {
 				px = getPixel(
 					x,
-					utilities.MaxMin(y-(len(kernel)/2-k), height-1, 0),
+					utilities.MaxMin(y-(kernelLen/2-k), height-1, 0),
 					width,
 				)
 				sumR += float64(temp[px]) * kernel[k]
@@ -64,51 +62,31 @@ func GaussianBlurEF(path string, sigma float64) {
 			img.Pix[i+1] = uint8(utilities.MaxMin(sumG, 255, 0))
 			img.Pix[i+2] = uint8(utilities.MaxMin(sumB, 255, 0))
 		}
+		<-signal
 	}
 
 	// horizontal
 	i := 0
 	for {
-		px := 0
-		for j := 0; j < threads; j += 1 {
-			disposition := i + j*step
-			if disposition < pixLen {
-				wg.Add(1)
-				px += step
-				go processing(disposition, "horizontal")
-			} else {
-				break
-			}
-		}
-		i += px
 		if i >= pixLen {
 			break
 		}
+		signal <- struct{}{}
+		go processing(i, "horizontal")
+		i += step
 	}
-
-	wg.Wait()
 
 	// vertical
 	i = 0
 	for {
-		px := 0
-		for j := 0; j < threads; j += 1 {
-			disposition := i + j*step
-			if disposition < pixLen {
-				wg.Add(1)
-				px += step
-				go processing(disposition, "vertical")
-			} else {
-				break
-			}
-		}
-		i += px
 		if i >= pixLen {
+			close(signal)
 			break
 		}
+		signal <- struct{}{}
+		go processing(i, "vertical")
+		i += step
 	}
-
-	wg.Wait()
 
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	saveMS := save(img, format, 1)

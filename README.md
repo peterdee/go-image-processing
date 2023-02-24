@@ -4,17 +4,11 @@ Various image processing functions written in Golang
 
 This module is a base for https://github.com/julyskies/brille
 
-### Filters to add
-
-1. Bilateral filter (static / dynamic)
-2. Gaussian blur (static)
-3. Image rotation for any given angle
-
 ### Available filters
 
 These filters are ready to be used and were optimized compared to previous implementations
 
-- Binary
+- Binary **(optimized, uses WaitGroup)**
 - Box blur (dynamic)
 - Brightness
 - Contrast
@@ -22,6 +16,7 @@ These filters are ready to be used and were optimized compared to previous imple
 - Emboss filter (edge detection, static)
 - Flip image (horizontal, vertical)
 - Gamma correction
+- Gaussian blur (dynamic) **(optimized, uses WaitGroup)**
 - Grayscale (average, luminance)
 - Hue rotate
 - Inversion
@@ -38,7 +33,6 @@ These filters are ready to be used and were optimized compared to previous imple
 These filters are not ready yet
 
 - Bilateral filter (static / dynamic)
-- Gaussian blur (dynamic)
 - Rotate image by any given angle
 
 ### License

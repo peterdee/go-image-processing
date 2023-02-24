@@ -10,7 +10,6 @@ import (
 	"math"
 	"os"
 	"runtime"
-	"sync"
 	"time"
 )
 
@@ -56,48 +55,45 @@ func save(img *image.RGBA, format string, iteration int) int {
 	return int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 }
 
-func processing(path string, threshold uint8, iteration int) int {
+// Binary filter that uses channels - slightly slower than WaitGroup
+func BinaryCH(path string, threshold uint8) {
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 
-	sa := len(img.Pix) / 4
+	pixLen := len(img.Pix)
+	threads := runtime.NumCPU()
+	pixPerThreadRaw := float64(pixLen) / float64(threads)
+	pixPerThread := int(pixPerThreadRaw + (float64(threads) - math.Mod(pixPerThreadRaw, 4.0)))
 
-	var wg sync.WaitGroup
-	wg.Add(4)
-
-	process := func(startIndex, endIndex int, threshold uint8, pixels *[]uint8) {
-		defer wg.Done()
-		pxs := *pixels
+	processing := func(startIndex int, ch chan int, thread int) {
+		endIndex := clampMax(startIndex+pixPerThread, pixLen)
 		for i := startIndex; i < endIndex; i += 4 {
-			average := uint8((int(pxs[i]) + int(pxs[i+1]) + int(pxs[i+2])) / 3)
+			average := uint8((int(img.Pix[i]) + int(img.Pix[i+1]) + int(img.Pix[i+2])) / 3)
 			channel := uint8(255)
 			if average < threshold {
 				channel = 0
 			}
-			pxs[i], pxs[i+1], pxs[i+2] = channel, channel, channel
+			img.Pix[i], img.Pix[i+1], img.Pix[i+2] = channel, channel, channel
+		}
+		ch <- thread
+	}
+
+	ch := make(chan int)
+	done := make([]int, 0)
+	for t := 0; t < threads; t += 1 {
+		go processing(pixPerThread*t, ch, t)
+	}
+	for {
+		result := <-ch
+		done = append(done, result)
+		if len(done) == threads {
+			close(ch)
+			break
 		}
 	}
 
-	go process(0, sa, threshold, &img.Pix)
-	// go process(sa, len(img.Pix), threshold, &img.Pix)
-	go process(sa, sa*2, threshold, &img.Pix)
-	go process(sa*2, sa*3, threshold, &img.Pix)
-	go process(sa*3, len(img.Pix), threshold, &img.Pix)
-
-	wg.Wait()
-
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
-	saveMS := save(img, format, iteration)
+	saveMS := save(img, format, 1)
 	sum := openMS + convertMS + processMS + saveMS
-	// println("f open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
-	return sum
-}
-
-func BinaryEF(path string, threshold uint8) {
-	iterations := 100
-	total := 0
-	for i := 0; i < iterations; i += 1 {
-		total += processing(path, threshold, i)
-	}
-	println("avg", total/iterations, "CPUs:", runtime.NumCPU())
+	println("f open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
 }

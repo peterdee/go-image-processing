@@ -1,4 +1,4 @@
-package progress
+package filters
 
 import (
 	"math"
@@ -9,8 +9,39 @@ import (
 	"go-image-processing/utilities"
 )
 
-// Gaussian blur: even more faster (sync.WaitGroup) - top 1
-func GaussianBlurEMF(path string, sigma float64) {
+const K float64 = 6
+
+func clampMax[T float64 | int | uint8](value, max T) T {
+	if value > max {
+		return max
+	}
+	return value
+}
+
+func createKernel(sigma float64) []float64 {
+	dim := math.Max(3.0, K*sigma)
+	sqrtSigmaPi2 := math.Sqrt(math.Pi*2.0) * sigma
+	s2 := 2.0 * sigma * sigma
+	sum := 0.0
+	kDim := dim
+	if int(kDim)%2 == 0 {
+		kDim = dim - 1
+	}
+	kernel := make([]float64, int(kDim))
+	half := int(len(kernel) / 2)
+	i := -half
+	for j := 0; j < len(kernel); j += 1 {
+		kernel[j] = math.Exp(-float64(i*i)/(s2)) / sqrtSigmaPi2
+		sum += kernel[j]
+		i += 1
+	}
+	for k := 0; k < int(kDim); k += 1 {
+		kernel[k] /= sum
+	}
+	return kernel
+}
+
+func GaussianBlur(path string, sigma float64) {
 	if sigma < 0 {
 		sigma *= -1
 	}
@@ -75,7 +106,6 @@ func GaussianBlurEMF(path string, sigma float64) {
 		wg.Add(1)
 		go processing(pixPerThread*t, "horizontal")
 	}
-
 	wg.Wait()
 
 	// vertical
@@ -83,12 +113,10 @@ func GaussianBlurEMF(path string, sigma float64) {
 		wg.Add(1)
 		go processing(pixPerThread*t, "vertical")
 	}
-
 	wg.Wait()
 
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
-	saveMS := save(img, format, 1)
+	saveMS := save(img, format)
 	sum := openMS + convertMS + processMS + saveMS
 	println("open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
-	println("threads", threads)
 }

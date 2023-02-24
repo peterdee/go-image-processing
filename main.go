@@ -1,13 +1,11 @@
 package main
 
-import (
-	progress "go-image-processing/in-progress"
-)
+import "go-image-processing/filters"
 
 var FORMAT string
 
 func main() {
-	path := "images/15.jpeg"
+	path := "images/10.jpeg"
 	// img, f, openMS, convertMS := utilities.OpenFile(path)
 	// FORMAT = f
 	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -22,19 +20,15 @@ func main() {
 	// saveMS := utilities.SaveFile("gaussEF-"+name, FORMAT, gaussEF)
 	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
 
-	// progress.BinaryEFSlices(path, 125)
-
-	blur := 10.0
-	// progress.GaussianBlur(path, blur)
-	// progress.GaussianBlurDA(path, blur)
-	progress.GaussianBlurDAF(path, blur)
-	// progress.GaussianBlurEF(path, blur)
-	// progress.GaussianBlurEMF(path, blur)
+	// Done
+	// progress.BinaryCH(path, 122)
+	// progress.GaussianBlurCH(path, blur)
+	// progress.GaussianBlurCHSlow(path, blur)
 
 	/* Optimized filters */
 
 	// filters.BilateralSlow(path, 3, 10, 15)
-	// filters.Binary(path, 125)
+	filters.Binary(path, 122)
 	// filters.BoxBlur(path, 7)
 	// filters.Brightness(path, 56)
 	// filters.Contrast(path, 225)
@@ -42,6 +36,7 @@ func main() {
 	// filters.Emboss(path)
 	// filters.Flip(path, constants.FLIP_TYPE_VERTICAL)
 	// filters.GammaCorrection(path, 0.7)
+	// filters.GaussianBlur(path, 5.2)
 	// filters.Grayscale(path, constants.GRAYSCALE_TYPE_AVERAGE)
 	// filters.HueRotate(path, 252)
 	// filters.Invert(path)
