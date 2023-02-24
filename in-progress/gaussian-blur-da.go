@@ -15,7 +15,7 @@ func clampMax[T float64 | int | uint8](value, max T) T {
 	return value
 }
 
-// Gaussian blur: different approach (channels)
+// Gaussian blur: different approach (channels) - top 2
 func GaussianBlurDA(path string, sigma float64) {
 	if sigma < 0 {
 		sigma *= -1
@@ -97,6 +97,7 @@ func GaussianBlurDA(path string, sigma float64) {
 		result := <-ch
 		resV = append(resV, result)
 		if len(resV) == threads {
+			close(ch)
 			break
 		}
 	}

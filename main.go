@@ -7,7 +7,7 @@ import (
 var FORMAT string
 
 func main() {
-	path := "images/10.jpeg"
+	path := "images/15.jpeg"
 	// img, f, openMS, convertMS := utilities.OpenFile(path)
 	// FORMAT = f
 	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -22,11 +22,13 @@ func main() {
 	// saveMS := utilities.SaveFile("gaussEF-"+name, FORMAT, gaussEF)
 	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
 
-	blur := 25.0
 	// progress.BinaryEFSlices(path, 125)
+
+	blur := 10.0
 	// progress.GaussianBlur(path, blur)
-	progress.GaussianBlurDA(path, blur)
-	// progress.GaussianBlurEF(path, 25)
+	// progress.GaussianBlurDA(path, blur)
+	progress.GaussianBlurDAF(path, blur)
+	// progress.GaussianBlurEF(path, blur)
 	// progress.GaussianBlurEMF(path, blur)
 
 	/* Optimized filters */

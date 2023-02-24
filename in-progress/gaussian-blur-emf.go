@@ -9,7 +9,7 @@ import (
 	"go-image-processing/utilities"
 )
 
-// Gaussian blur: even more faster (sync.WaitGroup)
+// Gaussian blur: even more faster (sync.WaitGroup) - top 1
 func GaussianBlurEMF(path string, sigma float64) {
 	if sigma < 0 {
 		sigma *= -1
@@ -30,7 +30,7 @@ func GaussianBlurEMF(path string, sigma float64) {
 
 	processing := func(start int, direction string) {
 		defer wg.Done()
-		end := utilities.MaxMin(start+pixPerThread, pixLen, 0)
+		end := clampMax(start+pixPerThread, pixLen)
 		for i := start; i < end; i += 4 {
 			x, y := getCoordinates(i/4, width)
 			sumR := 0.0
