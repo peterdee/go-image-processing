@@ -1,6 +1,9 @@
 package main
 
-import "go-image-processing/filters"
+import (
+	"go-image-processing/constants"
+	"go-image-processing/filters"
+)
 
 var FORMAT string
 
@@ -37,13 +40,13 @@ func main() {
 	// filters.Flip(path, constants.FLIP_TYPE_VERTICAL)
 	// filters.GammaCorrection(path, 0.7)
 	// filters.GaussianBlur(path, 5.2)
-	// filters.Grayscale(path, constants.GRAYSCALE_TYPE_AVERAGE)
+	filters.Grayscale(path, constants.GRAYSCALE_TYPE_LUMINANCE)
 	// filters.HueRotate(path, 252)
 	// filters.Invert(path)
 	// filters.Kuwahara(path, 4)
 	// filters.Laplacian(path)
 	// filters.RotateFixed(path, constants.ROTATE_FIXED_90)
-	filters.Sepia(path)
+	// filters.Sepia(path)
 	// filters.Sharpen(path, 92)
 	// filters.Sobel(path)
 	// filters.Solarize(path, 100)
