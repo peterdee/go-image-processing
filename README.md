@@ -23,10 +23,10 @@ These filters are ready to be used and were optimized compared to previous imple
 - Kuwahara filter (edge detection / coloring, dynamic)
 - Laplacian filter (edge detection, static)
 - Rotate image by fixed angle (90 / 180 / 270 degrees)
-- Sepia
+- Sepia **(optimized, uses WaitGroup)**
 - Sharpen filter (dynamic)
 - Sobel filter (edge detection, static)
-- Solarize
+- Solarize **(optimized, uses WaitGroup)**
 
 ### In progress
 

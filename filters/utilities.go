@@ -12,6 +12,26 @@ import (
 	"time"
 )
 
+func getCoordinates(pixel, width int) (int, int) {
+	return pixel % width, int(math.Floor(float64(pixel) / float64(width)))
+}
+
+func getGradientPoint(axisValue, shift, axisLength int) int {
+	if (axisValue + shift) >= axisLength {
+		return axisLength - axisValue - 1
+	}
+	return shift
+}
+
+func getPixel(x, y, width int) int {
+	return ((y * width) + x) * 4
+}
+
+func getPixPerThread(pixLen, threads int) int {
+	pixPerThreadRaw := float64(pixLen) / float64(threads)
+	return int(pixPerThreadRaw + (float64(threads) - math.Mod(pixPerThreadRaw, 4.0)))
+}
+
 func open(path string) (*image.RGBA, string, int, int) {
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	file, err := os.Open(path)

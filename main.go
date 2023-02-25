@@ -5,7 +5,7 @@ import "go-image-processing/filters"
 var FORMAT string
 
 func main() {
-	path := "images/10.jpeg"
+	path := "images/15.jpeg"
 	// img, f, openMS, convertMS := utilities.OpenFile(path)
 	// FORMAT = f
 	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -20,15 +20,15 @@ func main() {
 	// saveMS := utilities.SaveFile("gaussEF-"+name, FORMAT, gaussEF)
 	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
 
-	// Done
+	/* Alternative implementations */
+
 	// progress.BinaryCH(path, 122)
-	// progress.GaussianBlurCH(path, blur)
-	// progress.GaussianBlurCHSlow(path, blur)
+	// progress.GaussianBlurCH(path, 10.0)
+	// progress.GaussianBlurCHSlow(path, 10.0)
 
 	/* Optimized filters */
 
-	// filters.BilateralSlow(path, 3, 10, 15)
-	filters.Binary(path, 122)
+	// filters.Binary(path, 122)
 	// filters.BoxBlur(path, 7)
 	// filters.Brightness(path, 56)
 	// filters.Contrast(path, 225)
@@ -43,10 +43,10 @@ func main() {
 	// filters.Kuwahara(path, 4)
 	// filters.Laplacian(path)
 	// filters.RotateFixed(path, constants.ROTATE_FIXED_90)
-	// filters.Sepia(path)
+	filters.Sepia(path)
 	// filters.Sharpen(path, 92)
 	// filters.Sobel(path)
-	// filters.Solarize(path, 175)
+	// filters.Solarize(path, 100)
 
 	// sum := openMS + convertMS + processMS + saveMS
 	// println("s open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)

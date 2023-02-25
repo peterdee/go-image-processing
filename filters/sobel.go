@@ -19,21 +19,6 @@ var sobelVertical = [3][3]int{
 	{-1, -2, -1},
 }
 
-func getCoordinates(pixel, width int) (int, int) {
-	return pixel % width, int(math.Floor(float64(pixel) / float64(width)))
-}
-
-func getGradientPoint(axisValue, shift, axisLength int) int {
-	if (axisValue + shift) >= axisLength {
-		return axisLength - axisValue - 1
-	}
-	return shift
-}
-
-func getPixel(x, y, width int) int {
-	return ((y * width) + x) * 4
-}
-
 func Sobel(path string) {
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
