@@ -21,11 +21,11 @@ These filters are ready to be used and were optimized compared to previous imple
 - Hue rotate **(optimized, uses WaitGroup)**
 - Inversion **(optimized, uses WaitGroup)**
 - Kuwahara filter (edge detection / coloring, dynamic)
-- Laplacian filter (edge detection, static)
+- Laplacian filter (edge detection, static) **(optimized, uses WaitGroup)**
 - Rotate image by fixed angle (90 / 180 / 270 degrees)
 - Sepia **(optimized, uses WaitGroup)**
 - Sharpen filter (dynamic)
-- Sobel filter (edge detection, static)
+- Sobel filter (edge detection, static) **(optimized, uses WaitGroup)**
 - Solarize **(optimized, uses WaitGroup)**
 
 ### In progress

@@ -31,9 +31,9 @@ func main() {
 	/* Optimized filters */
 
 	// filters.Binary(path, 122)
-	// filters.BoxBlur(path, 7)
+	// filters.BoxBlur(path, 9)
 	// filters.Brightness(path, 256)
-	filters.Contrast(path, 205)
+	// filters.Contrast(path, 205)
 	// filters.EightColors(path)
 	// filters.Emboss(path)
 	// filters.Flip(path, constants.FLIP_TYPE_VERTICAL)
@@ -47,7 +47,7 @@ func main() {
 	// filters.RotateFixed(path, constants.ROTATE_FIXED_90)
 	// filters.Sepia(path)
 	// filters.Sharpen(path, 92)
-	// filters.Sobel(path)
+	filters.Sobel(path)
 	// filters.Solarize(path, 100)
 
 	// sum := openMS + convertMS + processMS + saveMS
