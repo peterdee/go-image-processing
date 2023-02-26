@@ -1,7 +1,6 @@
 package main
 
 import (
-	"go-image-processing/constants"
 	"go-image-processing/filters"
 )
 
@@ -33,14 +32,14 @@ func main() {
 
 	// filters.Binary(path, 122)
 	// filters.BoxBlur(path, 7)
-	// filters.Brightness(path, 56)
-	// filters.Contrast(path, 225)
+	// filters.Brightness(path, 256)
+	filters.Contrast(path, 205)
 	// filters.EightColors(path)
 	// filters.Emboss(path)
 	// filters.Flip(path, constants.FLIP_TYPE_VERTICAL)
-	// filters.GammaCorrection(path, 0.7)
+	// filters.GammaCorrection(path, 0.1)
 	// filters.GaussianBlur(path, 5.2)
-	filters.Grayscale(path, constants.GRAYSCALE_TYPE_LUMINANCE)
+	// filters.Grayscale(path, constants.GRAYSCALE_TYPE_LUMINANCE)
 	// filters.HueRotate(path, 252)
 	// filters.Invert(path)
 	// filters.Kuwahara(path, 4)

@@ -10,15 +10,15 @@ These filters are ready to be used and were optimized compared to previous imple
 
 - Binary **(optimized, uses WaitGroup)**
 - Box blur (dynamic)
-- Brightness
-- Contrast
+- Brightness **(optimized, uses WaitGroup)**
+- Contrast **(optimized, uses WaitGroup)**
 - Eight colors (color reduction filter) **(optimized, uses WaitGroup)**
 - Emboss filter (edge detection, static)
 - Flip image (horizontal, vertical)
-- Gamma correction
+- Gamma correction **(optimized, uses WaitGroup)**
 - Gaussian blur (dynamic) **(optimized, uses WaitGroup)**
 - Grayscale (average, luminance) **(optimized, uses WaitGroup)**
-- Hue rotate
+- Hue rotate **(optimized, uses WaitGroup)**
 - Inversion **(optimized, uses WaitGroup)**
 - Kuwahara filter (edge detection / coloring, dynamic)
 - Laplacian filter (edge detection, static)
