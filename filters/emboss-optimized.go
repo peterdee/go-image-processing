@@ -5,26 +5,25 @@ import (
 	"runtime"
 	"sync"
 	"time"
-
-	"go-image-processing/utilities"
 )
 
-var sobelHorizontal = [3][3]int{
-	{-1, 0, 1},
-	{-2, 0, 2},
-	{-1, 0, 1},
-}
-
-var sobelVertical = [3][3]int{
-	{1, 2, 1},
+var embossHorizontal = [3][3]int{
 	{0, 0, 0},
-	{-1, -2, -1},
+	{1, 0, -1},
+	{0, 0, 0},
 }
 
-func Sobel(path string) {
+var embossVertical = [3][3]int{
+	{0, 1, 0},
+	{0, 0, 0},
+	{0, -1, 0},
+}
+
+func Emboss(path string) {
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	width, height := img.Rect.Max.X, img.Rect.Max.Y
+
 	result := make([]uint8, len(img.Pix))
 
 	pixLen := len(img.Pix)
@@ -39,24 +38,22 @@ func Sobel(path string) {
 		endIndex := clampMax(startIndex+pixPerThread, pixLen)
 		for i := startIndex; i < endIndex; i += 4 {
 			x, y := getCoordinates(i/4, width)
-			gradientX, gradientY := 0, 0
+			gradientX := 0
+			gradientY := 0
 			for m := 0; m < 3; m += 1 {
 				for n := 0; n < 3; n += 1 {
-					px := getPixel(
-						utilities.MaxMin(x-(len(laplacianKernel)/2-m), width-1, 0),
-						utilities.MaxMin(y-(len(laplacianKernel)/2-n), height-1, 0),
-						width,
-					)
+					k := getGradientPoint(x, m, width)
+					l := getGradientPoint(y, n, height)
+					px := getPixel(x+k, y+l, width)
 					average := (int(img.Pix[px]) + int(img.Pix[px+1]) + int(img.Pix[px+2])) / 3
-					gradientX += average * sobelHorizontal[m][n]
-					gradientY += average * sobelVertical[m][n]
+					gradientX += average * embossHorizontal[m][n]
+					gradientY += average * embossVertical[m][n]
 				}
 			}
 			channel := uint8(
-				255 - utilities.MaxMin(
+				255 - clampMax(
 					math.Sqrt(float64(gradientX*gradientX+gradientY*gradientY)),
 					255,
-					0,
 				),
 			)
 			result[i], result[i+1], result[i+2], result[i+3] = channel, channel, channel, img.Pix[i+3]

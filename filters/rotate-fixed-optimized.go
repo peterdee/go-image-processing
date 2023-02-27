@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"image/color"
 	"math"
+	"runtime"
+	"sync"
 	"time"
 
 	"go-image-processing/constants"
@@ -24,25 +26,45 @@ func RotateFixed(path string, angle uint) {
 		gridWidth, gridHeight = height, width
 	}
 	destination := utilities.CreateGrid(gridWidth, gridHeight)
-	for i := 0; i < len(img.Pix); i += 4 {
-		x, y := getCoordinates(i/4, width)
-		dx, dy := y, x
-		if angle == constants.ROTATE_FIXED_90 {
-			dx = height - y - 1
-		}
-		if angle == constants.ROTATE_FIXED_180 {
-			dx, dy = width-x-1, height-y-1
-		}
-		if angle == constants.ROTATE_FIXED_270 {
-			dy = width - x - 1
-		}
-		destination[dx][dy] = color.RGBA{
-			img.Pix[i],
-			img.Pix[i+1],
-			img.Pix[i+2],
-			img.Pix[i+3],
+
+	pixLen := len(img.Pix)
+	threads := runtime.NumCPU()
+	pixPerThread := getPixPerThread(pixLen, threads)
+
+	var wg sync.WaitGroup
+
+	processing := func(thread int) {
+		defer wg.Done()
+		startIndex := pixPerThread * thread
+		endIndex := clampMax(startIndex+pixPerThread, pixLen)
+		for i := startIndex; i < endIndex; i += 4 {
+			x, y := getCoordinates(i/4, width)
+			dx, dy := y, x
+			if angle == constants.ROTATE_FIXED_90 {
+				dx = height - y - 1
+			}
+			if angle == constants.ROTATE_FIXED_180 {
+				dx, dy = width-x-1, height-y-1
+			}
+			if angle == constants.ROTATE_FIXED_270 {
+				dy = width - x - 1
+			}
+			destination[dx][dy] = color.RGBA{
+				img.Pix[i],
+				img.Pix[i+1],
+				img.Pix[i+2],
+				img.Pix[i+3],
+			}
 		}
 	}
+
+	for t := 0; t < threads; t += 1 {
+		wg.Add(1)
+		go processing(t)
+	}
+
+	wg.Wait()
+
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	saveMS := utilities.SaveFile(
 		fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), format),

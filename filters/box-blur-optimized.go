@@ -25,16 +25,14 @@ func BoxBlur(path string, radius uint) {
 		startIndex := pixPerThread * thread
 		endIndex := clampMax(startIndex+pixPerThread, pixLen)
 		for i := startIndex; i < endIndex; i += 4 {
-			dR, dG, dB := 0, 0, 0
 			x, y := getCoordinates(i/4, width)
-			pixelCount := 1
-			for m := -radiusInt; m < radiusInt+1; m += 1 {
-				for n := -radiusInt; n < radiusInt+1; n += 1 {
-					dx, dy := x-m, y-n
-					if dx < 0 || dx > width-1 || dy < 0 || dy > height-1 {
-						continue
-					}
-					px := getPixel(dx, dy, width)
+			dR, dG, dB := 0, 0, 0
+			pixelCount := 0
+			x2s, x2e := getAperture(x, width, -radiusInt, radiusInt)
+			y2s, y2e := getAperture(y, height, -radiusInt, radiusInt)
+			for x2 := x2s; x2 < x2e; x2 += 1 {
+				for y2 := y2s; y2 < y2e; y2 += 1 {
+					px := getPixel(x2, y2, width)
 					dR += int(img.Pix[px])
 					dG += int(img.Pix[px+1])
 					dB += int(img.Pix[px+2])
@@ -44,6 +42,7 @@ func BoxBlur(path string, radius uint) {
 			result[i] = uint8(dR / pixelCount)
 			result[i+1] = uint8(dG / pixelCount)
 			result[i+2] = uint8(dB / pixelCount)
+			result[i+3] = img.Pix[i+3]
 		}
 	}
 

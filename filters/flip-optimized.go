@@ -6,20 +6,24 @@ import (
 	"sync"
 	"time"
 
-	"go-image-processing/utilities"
+	"go-image-processing/constants"
 )
 
-var laplacianKernel = [3][3]int{
-	{-1, -1, -1},
-	{-1, 8, -1},
-	{-1, -1, -1},
-}
-
-func Laplacian(path string) {
+func Flip(path, flipType string) {
+	if flipType != constants.FLIP_TYPE_HORIZONTAL &&
+		flipType != constants.FLIP_TYPE_VERTICAL {
+		flipType = constants.FLIP_TYPE_HORIZONTAL
+	}
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
 	width, height := img.Rect.Max.X, img.Rect.Max.Y
-	result := make([]uint8, len(img.Pix))
+	widthCorrection, heightCorrection := 0, 0
+	if width%2 != 0 {
+		widthCorrection = 1
+	}
+	if height%2 != 0 {
+		heightCorrection = 1
+	}
 
 	pixLen := len(img.Pix)
 	threads := runtime.NumCPU()
@@ -32,21 +36,22 @@ func Laplacian(path string) {
 		startIndex := pixPerThread * thread
 		endIndex := clampMax(startIndex+pixPerThread, pixLen)
 		for i := startIndex; i < endIndex; i += 4 {
-			averageSum := 0
 			x, y := getCoordinates(i/4, width)
-			for m := 0; m < 3; m += 1 {
-				for n := 0; n < 3; n += 1 {
-					px := getPixel(
-						utilities.MaxMin(x-(len(laplacianKernel)/2-m), width-1, 0),
-						utilities.MaxMin(y-(len(laplacianKernel)/2-n), height-1, 0),
-						width,
-					)
-					average := (int(img.Pix[px]) + int(img.Pix[px+1]) + int(img.Pix[px+2])) / 3
-					averageSum += average * laplacianKernel[m][n]
-				}
+			var j int
+			skip := true
+			if flipType == constants.FLIP_TYPE_HORIZONTAL && x < width/2+widthCorrection {
+				j = getPixel(width-x-1, y, width)
+				skip = false
 			}
-			channel := 255 - uint8(utilities.MaxMin(averageSum, 255, 0))
-			result[i], result[i+1], result[i+2], result[i+3] = channel, channel, channel, img.Pix[i+3]
+			if flipType == constants.FLIP_TYPE_VERTICAL && y < height/2+heightCorrection {
+				j = getPixel(x, height-y-1, width)
+				skip = false
+			}
+			if !skip {
+				r, g, b := img.Pix[i], img.Pix[i+1], img.Pix[i+2]
+				img.Pix[i], img.Pix[i+1], img.Pix[i+2] = img.Pix[j], img.Pix[j+1], img.Pix[j+2]
+				img.Pix[j], img.Pix[j+1], img.Pix[j+2] = r, g, b
+			}
 		}
 	}
 
@@ -56,8 +61,6 @@ func Laplacian(path string) {
 	}
 
 	wg.Wait()
-
-	img.Pix = result
 
 	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
 	saveMS := save(img, format)

@@ -9,27 +9,22 @@ import (
 	"go-image-processing/utilities"
 )
 
-var sobelHorizontal = [3][3]int{
-	{-1, 0, 1},
-	{-2, 0, 2},
-	{-1, 0, 1},
+var sharpenKernel = [3][3]int{
+	{-1, -1, -1},
+	{-1, 9, -1},
+	{-1, -1, -1},
 }
 
-var sobelVertical = [3][3]int{
-	{1, 2, 1},
-	{0, 0, 0},
-	{-1, -2, -1},
-}
-
-func Sobel(path string) {
+func Sharpen(path string, amount uint) {
 	img, format, openMS, convertMS := open(path)
 	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
+	mix := float64(utilities.MaxMin(amount, 100, 0)) / 100
 	width, height := img.Rect.Max.X, img.Rect.Max.Y
-	result := make([]uint8, len(img.Pix))
 
 	pixLen := len(img.Pix)
 	threads := runtime.NumCPU()
 	pixPerThread := getPixPerThread(pixLen, threads)
+	result := make([]uint8, pixLen)
 
 	var wg sync.WaitGroup
 
@@ -38,28 +33,28 @@ func Sobel(path string) {
 		startIndex := pixPerThread * thread
 		endIndex := clampMax(startIndex+pixPerThread, pixLen)
 		for i := startIndex; i < endIndex; i += 4 {
+			dR, dG, dB := 0, 0, 0
 			x, y := getCoordinates(i/4, width)
-			gradientX, gradientY := 0, 0
 			for m := 0; m < 3; m += 1 {
 				for n := 0; n < 3; n += 1 {
-					px := getPixel(
-						utilities.MaxMin(x-(len(laplacianKernel)/2-m), width-1, 0),
-						utilities.MaxMin(y-(len(laplacianKernel)/2-n), height-1, 0),
-						width,
-					)
-					average := (int(img.Pix[px]) + int(img.Pix[px+1]) + int(img.Pix[px+2])) / 3
-					gradientX += average * sobelHorizontal[m][n]
-					gradientY += average * sobelVertical[m][n]
+					k := getGradientPoint(x, m, width)
+					l := getGradientPoint(y, n, height)
+					px := getPixel(x+k, y+l, width)
+					dR += int(img.Pix[px]) * sharpenKernel[m][n]
+					dG += int(img.Pix[px+1]) * sharpenKernel[m][n]
+					dB += int(img.Pix[px+2]) * sharpenKernel[m][n]
 				}
 			}
-			channel := uint8(
-				255 - utilities.MaxMin(
-					math.Sqrt(float64(gradientX*gradientX+gradientY*gradientY)),
-					255,
-					0,
-				),
+			result[i] = uint8(
+				utilities.MaxMin(float64(dR)*mix+float64(img.Pix[i])*(1-mix), 255, 0),
 			)
-			result[i], result[i+1], result[i+2], result[i+3] = channel, channel, channel, img.Pix[i+3]
+			result[i+1] = uint8(
+				utilities.MaxMin(float64(dG)*mix+float64(img.Pix[i+1])*(1-mix), 255, 0),
+			)
+			result[i+2] = uint8(
+				utilities.MaxMin(float64(dB)*mix+float64(img.Pix[i+2])*(1-mix), 255, 0),
+			)
+			result[i+3] = img.Pix[i+3]
 		}
 	}
 
