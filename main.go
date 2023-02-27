@@ -7,7 +7,7 @@ import (
 var FORMAT string
 
 func main() {
-	path := "images/15.jpeg"
+	path := "images/14.jpeg"
 	// img, f, openMS, convertMS := utilities.OpenFile(path)
 	// FORMAT = f
 	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
@@ -31,7 +31,7 @@ func main() {
 	/* Optimized filters */
 
 	// filters.Binary(path, 122)
-	// filters.BoxBlur(path, 9)
+	filters.BoxBlur(path, 10)
 	// filters.Brightness(path, 256)
 	// filters.Contrast(path, 205)
 	// filters.EightColors(path)
@@ -47,7 +47,7 @@ func main() {
 	// filters.RotateFixed(path, constants.ROTATE_FIXED_90)
 	// filters.Sepia(path)
 	// filters.Sharpen(path, 92)
-	filters.Sobel(path)
+	// filters.Sobel(path)
 	// filters.Solarize(path, 100)
 
 	// sum := openMS + convertMS + processMS + saveMS

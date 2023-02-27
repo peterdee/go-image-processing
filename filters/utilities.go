@@ -12,6 +12,17 @@ import (
 	"time"
 )
 
+func getAperture(axisValue, axisMax, apertureMin, apertureMax int) (int, int) {
+	start, end := 0, axisMax
+	if axisValue+apertureMin > 0 {
+		start = axisValue + apertureMin
+	}
+	if axisValue+apertureMax < axisMax {
+		end = axisValue + apertureMax
+	}
+	return start, end
+}
+
 func getCoordinates(pixel, width int) (int, int) {
 	return pixel % width, int(math.Floor(float64(pixel) / float64(width)))
 }
