@@ -1,25 +1,29 @@
 package main
 
-import "go-image-processing/filters"
+import (
+	"fmt"
+	progress "go-image-processing/in-progress"
+	"go-image-processing/utilities"
+	"math"
+	"time"
+)
 
 var FORMAT string
 
 func main() {
-	path := "images/14.jpeg"
-	// img, f, openMS, convertMS := utilities.OpenFile(path)
-	// FORMAT = f
-	// now := math.Round(float64(time.Now().UnixNano()) / 1000000)
-	// rotateN := processing.RotateAngle(img, 52)
-	// bilateral := progress.Bilateral(img, 3, 10, 15)
-	// processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
-	// name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
-	// utilities.SaveFile("rotateN-"+name, FORMAT, rotateN)
-	// saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
+	path := "images/15.jpeg"
+	img, f, openMS, convertMS := utilities.OpenFile(path)
+	FORMAT = f
+	now := math.Round(float64(time.Now().UnixNano()) / 1000000)
+	bilateral := progress.Bilateral(img, 3, 10, 15)
+	processMS := int(math.Round(float64(time.Now().UnixNano())/1000000) - now)
+	name := fmt.Sprintf(`file-%d.%s`, time.Now().Unix(), FORMAT)
+	saveMS := utilities.SaveFile("bilateral-"+name, FORMAT, bilateral)
 
 	/* Optimized filters */
 
 	// filters.Binary(path, 122)
-	filters.BoxBlur(path, 10)
+	// filters.BoxBlur(path, 10)
 	// filters.Brightness(path, 256)
 	// filters.Contrast(path, 205)
 	// filters.EightColors(path)
@@ -44,6 +48,6 @@ func main() {
 	// progress.GaussianBlurCH(path, 10.0)
 	// progress.GaussianBlurCHSlow(path, 10.0)
 
-	// sum := openMS + convertMS + processMS + saveMS
-	// println("s open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
+	sum := openMS + convertMS + processMS + saveMS
+	println("s open", openMS, "convert", convertMS, "process", processMS, "save", saveMS, "sum", sum)
 }
